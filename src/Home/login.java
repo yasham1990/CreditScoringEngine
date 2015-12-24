@@ -46,6 +46,8 @@ public class login
     final static private String USER = "user";
     
     final static private String SIGNUPCLIENT = "signupclient";
+    
+    private String pass1;
 
     static Logger log = Logger.getLogger( login.class );
 
@@ -75,17 +77,15 @@ public class login
         this.userName = userName;
     }
 
-    public String getPassword()
+    public String getPass1()
     {
-        return password;
+        return pass1;
     }
 
-    public void setPassword( String password )
+    public void setPass1( String pass1 )
     {
-        this.password = password;
+        this.pass1 = pass1;
     }
-
-    private String password;
 
     public login()
     {
@@ -100,22 +100,22 @@ public class login
         {
             if ( official.equalsIgnoreCase( "Admin" ) )
             {
-                namedis = getData( "employee", "primarykey ","e_id" );
+                namedis = getData( "employee", "primarykey ","e_id='"+userName+"' and e_pass='"+pass1+"'" );
                 returnPage = ADMIN;
             }
             if ( official.equalsIgnoreCase( "Manager" ) )
             {
-                namedis = getData( "employee", "primarykey ", "e_id" );
+                namedis = getData( "employee", "primarykey ", "e_id='"+userName+"' and e_pass='"+pass1+"'" );
                 returnPage = MANAGER;
             }
             else if ( official.equalsIgnoreCase( "Employee" ) )
             {
-                namedis = getData( "employee", "primarykey", "e_id" );
+                namedis = getData( "employee", "primarykey", "e_id='"+userName+"' and e_pass='"+pass1+"'" );
                 returnPage = EMPLOYEE;
             }
-            else if ( official.equalsIgnoreCase( "User" ) )
+            else if ( official.equalsIgnoreCase( "Clients" ) )
             {
-                namedis = getData( "clients", "primarykey ", "c_email" );
+                namedis = getData( "clients", "primarykey ", "c_email='"+userName+"' and c_pass='"+pass1+"'" );
                 returnPage = USER;
             }
         }
@@ -136,7 +136,7 @@ public class login
             utility = new ScoringUtility();
             con1 = utility.openDatabaseConnection();
             String str =
-                "SELECT " + attributesName + " FROM " + tableName + " where " + whereClause + "='" + userName + "'";
+                "SELECT " + attributesName + " FROM " + tableName + " where " + whereClause;
             Statement stmt = con1.createStatement();
             ResultSet rs = stmt.executeQuery( str );
 
@@ -155,37 +155,37 @@ public class login
     {
         utility = new ScoringUtility();
         if ( official.length() == 0 )
-            addFieldError( "official", "Please enter username!" );
+            addFieldError( "official", "Please select the usertype!" );
         if ( userName.length() == 0 )
             addFieldError( "userName", "Please enter username!" );
-        if ( password.length() == 0 )
-            addFieldError( "pass", "Please enter password!" );
-        if ( userName.length() != 0 && password.length() != 0 )
+        if ( pass1.length() == 0 )
+            addFieldError( "pass1", "Please enter password!" );
+        if ( userName.length() != 0 && pass1.length() != 0 )
         {
             if ( official.equalsIgnoreCase( "Admin" ) )
-                checkData( "employee" );
+                checkData( "employee", "e_id='"+userName+"' and e_pass='"+pass1+"' and e_type='"+official+"'" );
             else if ( official.equalsIgnoreCase( "Manager" ) )
-                checkData( "employee" );
+                checkData( "employee", "e_id='"+userName+"' and e_pass='"+pass1+"' and e_type='"+official+"'" );
             else if ( official.equalsIgnoreCase( "Employee" ) )
-                checkData( "employee" );
+                checkData( "employee" , "e_id='"+userName+"' and e_pass='"+pass1+"' and e_type='"+official+"'" );
             else if ( official.equalsIgnoreCase( "Clients" ) )
-                checkData( "clients" );
+                checkData( "clients" , "c_email='"+userName+"' and c_pass='"+pass1+"'"  );
         }
     }
 
-    private void checkData( String tableName )
+    private void checkData( String tableName , String whereClause )
     {
         try
         {
             int flag = 0;
             con1 = utility.openDatabaseConnection();
-            String str = "SELECT * FROM " + tableName+" where e_type='"+official+"'";
+            String str = "SELECT * FROM " + tableName+" where "+whereClause;
             Statement stmt = con1.createStatement();
             ResultSet rs = stmt.executeQuery( str );
 
             while ( rs.next() )
             {
-                if ( rs.getString( 2 ).equals( userName ) && rs.getString( 3 ).equals( password ) )
+                if ( rs.getString( 2 ).equals( userName ) && rs.getString( 3 ).equals( pass1 ) )
                     flag = 1;
             }
             if ( flag == 0 )

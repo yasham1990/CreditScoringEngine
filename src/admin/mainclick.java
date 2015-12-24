@@ -24,7 +24,8 @@ import emp.click;
  * @author yasham
  */
 public class mainclick
-    extends ActionSupport implements SessionAware
+    extends ActionSupport
+    implements SessionAware
 {
 
     private SessionMap<String, Object> sessionMap;
@@ -85,9 +86,9 @@ public class mainclick
             {
                 while ( rs.next() )
                     h1.add( rs.getString( 1 ) );
-                context.put( "h1", h1 );
-                stack.push( context );
             }
+            context.put( "h1", h1 );
+            stack.push( context );
             con1.close();
         }
         catch ( Exception e )
@@ -107,16 +108,18 @@ public class mainclick
             ValueStack stack = ActionContext.getContext().getValueStack();
             Map<String, List<String>> context = new HashMap<String, List<String>>();
             con1 = utility.openDatabaseConnection();
-            String str = "SELECT e_id FROM  employee order by primarykey";
+            String str = "SELECT e_id FROM  employee where e_type!='Admin' order by primarykey";
             java.sql.Statement stmt = con1.createStatement();
             ResultSet rs = stmt.executeQuery( str );
-
-            while ( rs.next() )
+            if ( rs.isBeforeFirst() == false )
+                h1.add( "There is no application request pending" );
+            else
             {
-                h1.add( rs.getString( 1 ) );
-                context.put( "h1", h1 );
-                stack.push( context );
+                while ( rs.next() )
+                    h1.add( rs.getString( 1 ) );
             }
+            context.put( "h1", h1 );
+            stack.push( context );
             con1.close();
         }
         catch ( Exception e )

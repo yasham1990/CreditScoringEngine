@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+        "http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+
+       
+<validators>    
+    <field name="employeeVerificationBean.fname">
+        <field-validator type="requiredstring">
+            <message>Enter First Name</message>
+        </field-validator> 
+         <field-validator type="regex">
+            <param name="expression">^[A-Za-z ]{1,30}$ </param>
+            <message>Name can contain only characters</message>
+        </field-validator>
+    </field>
+    
+    <field name="employeeVerificationBean.lname">
+        <field-validator type="requiredstring">
+            <message>Enter Last Name</message>
+        </field-validator>   
+         <field-validator type="regex">
+            <param name="expression">^[A-Za-z ]{1,30}$ </param>
+            <message>Name can contain only characters</message>
+        </field-validator>
+    </field>
+   
+    <field name="employeeVerificationBean.email">
+        <field-validator type="email">
+          <message>Email Address is not correct</message>
+      </field-validator>
+        <field-validator type="requiredstring">
+            <message>Email is required</message>
+        </field-validator>    
+    </field>
+    
+    <field name="employeeVerificationBean.mob">
+              <field-validator type="regex">
+            <param name="expression">^[0-9]{10,10}$</param>
+            <message>Phone number format XXXXXXXXXX</message>
+        </field-validator>
+        <field-validator type="requiredstring">
+            <message>Mobile No. is required</message>
+        </field-validator>    
+    </field>
+    
+    <field name="employeeVerificationBean.members">
+        <field-validator type="requiredstring">
+            <message>Enter no. of family members</message>
+        </field-validator>    
+              <field-validator type="regex">
+            <param name="expression">^[0-9]{1,4}$</param>
+            <message>Enter Value in Integer form</message>
+        </field-validator>
+    </field>
+    
+    
+    <field name="employeeVerificationBean.harea">
+        <field-validator type="requiredstring">
+            <message>House area is required</message>
+        </field-validator>    
+    </field>
+    
+    <field name="employeeVerificationBean.cars">
+        <field-validator type="requiredstring">
+            <message>No of cars is required</message>
+        </field-validator>    
+                 <field-validator type="regex">
+            <param name="expression">^[0-9]{1,4}$</param>
+            <message>Enter in Integer form</message>
+        </field-validator>
+    </field>
+    
+    <field name="employeeVerificationBean.inc">
+        <field-validator type="requiredstring">
+            <message>Income is required</message>
+        </field-validator>    
+        <field-validator type="regex">
+            <param name="expression">^[0-9]{1,10}$</param>
+            <message>Enter in Integer form</message>
+        </field-validator>
+    </field>
+    
+    <field name="employeeVerificationBean.fd">
+        <field-validator type="requiredstring">
+            <message>No.of fixed deposit is required</message>
+        </field-validator>    
+         <field-validator type="regex">
+            <param name="expression">^[0-9]{1,4}$</param>
+            <message>Enter Value in Integer form</message>
+        </field-validator>    </field>
+    
+    <field name="employeeVerificationBean.netfd">
+        <field-validator type="requiredstring">
+            <message> Net FD amount is required</message>
+        </field-validator>    
+    </field>
+    
+    <field name="employeeVerificationBean.agland">
+        <field-validator type="requiredstring">
+            <message>Agricultural Land is required</message>
+        </field-validator>    
+    </field>
+    
+    <field name="employeeVerificationBean.lic">
+        <field-validator type="requiredstring">
+            <message>Life insurance policy is required</message>
+        </field-validator>        
+              <field-validator type="regex">
+            <param name="expression">^[0-9]{1,4}$</param>
+            <message>Enter in Integer form</message>
+        </field-validator>
+    </field>
+    
+    <field name="employeeVerificationBean.bdflt">
+              <field-validator type="requiredstring">
+            <message>Value Required</message>
+        </field-validator> 
+         <field-validator type="regex">
+            <param name="expression">^[0-9]{1,10}$</param>
+            <message>Enter in Integer form</message>
+        </field-validator>
+    </field>
+    
+    <field name="employeeVerificationBean.tax">
+        <field-validator type="requiredstring">
+            <message>Value Required</message>
+        </field-validator>    
+              <field-validator type="regex">
+           <param name="expression">^[0-9]{1,10}$</param>
+            <message>Enter Value in Integer form</message>
+        </field-validator>
+    </field>
+</validators>

@@ -191,6 +191,7 @@ public class Generate
                     totscore += score;
                     context.put( "otherinc", score.toString() );
                     context.put( "totscore", totscore.toString() );
+                    sessionMap.put( "totalscore", totscore.toString() );
                 }
             stack.push( context );
             con1.close();

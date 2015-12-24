@@ -67,16 +67,14 @@ public class Clickme
             Statement stmt = con1.createStatement();
             ResultSet rs = stmt.executeQuery( str );
             if ( rs.isBeforeFirst() == false )
-            {
                 h1.add( "There is no application request pending" );
-            }
             else
             {
                 while ( rs.next() )
                     h1.add( rs.getString( 1 ) );
-                context.put( "h1", h1 );
-                stack.push( context );
             }
+            context.put( "h1", h1 );
+            stack.push( context );
             con1.close();
         }
         catch ( Exception e )

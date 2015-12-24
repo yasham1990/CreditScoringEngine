@@ -5,8 +5,7 @@
 <head>
  <jsp:include page="/common.jsp"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- 
-<title>Registration</title>
+<title>Credit Scoring Engine</title>
 <script type="text/javascript">
     	function go(action)
     	{
@@ -19,6 +18,23 @@
     </script>
 </head>
 <body>
+<div class="navbar-nav navbar-inverse navbar-fixed-top">
+        <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="index.html">User Dashboard</a>
+        </div> 
+        
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="page-scroll">
+                        <s:url action="logoutclient" var="welcome" />
+                	<s:a href="%{welcome}" >Logout</s:a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<section>
 <div class="container">
             <div class="row">
              <div class="col-md-11 col-md-offset-1">
@@ -178,12 +194,15 @@
     </div>
     </div>
     <div>*Fields cannot be left empty</div>
+    <div class="text-center">
     <button type="button" class="btn btn-success" onclick="go('')">Next</button>
    	<button type="button" class="btn btn-success" onclick="go('regisback')">Back</button>
+   	</div>
   </fieldset>
 
 </form>
 </div>
       </div></div></div></div>
+      </section>
 </body>
 </html>

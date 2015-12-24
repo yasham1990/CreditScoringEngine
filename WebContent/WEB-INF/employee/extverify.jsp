@@ -19,6 +19,23 @@
     </script>
 </head>
 <body>
+<div class="navbar-nav navbar-inverse navbar-fixed-top">
+        <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="index.html"> Employee Dashboard</a>
+        </div> 
+        
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="page-scroll">
+                        <s:url action="logoutemp" var="welcome" />
+                	<s:a href="%{welcome}" >Logout</s:a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<section>
 <div class="container">
             <div class="row">
              <div class="col-md-11 col-md-offset-1">
@@ -172,12 +189,25 @@
     </div>
     </div>
     <div>*Fields cannot be left empty</div>
+    <div class="text-center">
     <button type="button" class="btn btn-success" onclick="go('forward')">Forward</button>
    	<button type="button" class="btn btn-success" onclick="go('extverifyback')">Back</button>
+   	</div>
   </fieldset>
 </form>
 </div>
       </div></div></div></div>
+      </section>
+<div class="navbar-nav navbar-inverse navbar-fixed-bottom">
+        <div class="container">
+        <div class="nav">
+        <ul class="nav navbar-nav navbar-right">
+                    <li class="page-scroll">
+          <a href="index.html"> Company Logo</a></li></ul>
+        </div> 
+       
+        </div>
+    </div>
 </body>
 </html>
 

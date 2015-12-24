@@ -33,11 +33,6 @@
             <result name="signupclientback">/home.jsp</result>   
         </action>
         
-        <action name="clear" method="clearall" class="Home.Reach">
-            <result name="input">/home.jsp</result>
-            <result name="failure">/home.jsp</result>       
-        </action>
-        
            <!-- ************for manager********** -->
            
        <action name="passviewman" method="passviewman" class="manage.Clickme">
@@ -63,17 +58,17 @@
             <result name="success">/WEB-INF/manager/toappreq.jsp</result>
        </action>
 
+		<action name="appnoinfo" class="manage.appnoinfo">
+            <result name="input">/WEB-INF/manager/toappreq.jsp</result>
+            <result name="success">/WEB-INF/manager/Viewreqinfo.jsp</result>
+       </action>
+       
        <action name="appnoinfoback" method="appnoinfoback" class="manage.appnoinfo">
        <interceptor-ref name="defaultStack">
-        		<param name="validation.excludeMethods">"appnoinfoback"</param>
+        		<param name="validation.excludeMethods">appnoinfoback</param>
     		</interceptor-ref>
             <result name="input">/WEB-INF/manager/toappreq.jsp</result>
             <result name="appnoinfoback">/WEB-INF/manager/manager.jsp</result>
-       </action>
-       
-       <action name="appnoinfo" class="manage.appnoinfo">
-            <result name="input">/WEB-INF/manager/toappreq.jsp</result>
-            <result name="success">/WEB-INF/manager/Viewreqinfo.jsp</result>
        </action>
        
        <action name="Clickmeback"  class="manage.Clickme">
@@ -321,9 +316,9 @@
              <result name="input">/WEB-INF/client/clientpass.jsp</result>
         </action>
         
-        <action name="applicationNew"  method="applicationStatus" class="client.clientclick">
+        <action name="applicationNew"  method="applicationNew" class="client.clientclick">
              <result name="input">/WEB-INF/client/User.jsp</result>
-             <result name="applicationStatus">/WEB-INF/client/ApplicationNew.jsp</result>
+             <result name="applicationNew">/WEB-INF/client/ApplicationNew.jsp</result>
         </action>
         
         <action name="registerClick"   class="client.ApplicationStatus">
@@ -387,6 +382,21 @@
     		</interceptor-ref>
              <result name="input">/WEB-INF/client/clientview.jsp</result>
              <result name="clientviewback">/WEB-INF/client/User.jsp</result>
+        </action>
+        
+        <action name="reachoutsection"  method ="reachoutsection" class="client.clientclick">
+             <result name="input">/WEB-INF/client/User.jsp</result>
+             <result name="reachoutsection">/WEB-INF/client/reach.jsp</result>
+        </action>
+        
+        <action name="clear" method="clearall" class="client.Reach">
+            <result name="input">/WEB-INF/client/reach.jsp</result>
+            <result name="failure">/WEB-INF/client/User.jsp</result>       
+        </action>
+        
+        <action name="reach" class="client.Reach">
+        	<result name="input">/WEB-INF/client/reach.jsp</result>
+            <result name="success">/WEB-INF/client/User.jsp</result> 
         </action>
         
     </package>

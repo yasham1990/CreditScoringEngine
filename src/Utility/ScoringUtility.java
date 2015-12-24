@@ -20,11 +20,11 @@ public class ScoringUtility
         {
             Class.forName( "com.mysql.jdbc.Driver" );
             /* Establish a connection with a data source */
-            con1 = DriverManager.getConnection( "jdbc:mysql://localhost/creditscoringengine", "root", "yash" );
+            con1 = DriverManager.getConnection( "jdbc:mysql://cmpe.cgje8hjr4ff1.us-west-2.rds.amazonaws.com/creditscoringengine", "cmpe", "india123" );
         }
         catch ( Exception e )
         {
-            System.out.println( e.getStackTrace() );
+            log.error( e.getMessage() );
         }
         return con1;
     }

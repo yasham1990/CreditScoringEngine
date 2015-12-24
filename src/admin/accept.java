@@ -54,7 +54,7 @@ public class accept
         try
         {
             con1 = utility.openDatabaseConnection();
-            String str2 = "UPDATE applicationid set status='Approved' and level='admin' where app_no=?";
+            String str2 = "UPDATE applicationid set status='approved', level='admin' where app_no=?";
             PreparedStatement ps = con1.prepareStatement( str2 );
             ps.setString( 1, (String)sessionMap.get( "app_no" ) );
             ps.executeUpdate();
@@ -63,7 +63,7 @@ public class accept
             java.sql.Statement stmt = con1.createStatement();
             ResultSet rs = stmt.executeQuery( str3 );
             if ( rs != null && rs.next() )
-                bankup = Integer.parseInt( rs.getString( 2 ) );
+                bankup = Integer.parseInt( rs.getString( 2 ) )+1;
             
             String str4 = "Update bankinfo set totalcards=?";
             ps = con1.prepareStatement( str4 );
@@ -83,7 +83,7 @@ public class accept
         try
         {
             con1 = utility.openDatabaseConnection();
-            String str2 = "UPDATE applicationid set status='Rejected' and level='admin' where app_no=?";
+            String str2 = "UPDATE applicationid set status='rejected' and level='admin' where app_no=?";
             PreparedStatement ps = con1.prepareStatement( str2 );
             ps.setString( 1, (String)sessionMap.get( "app_no" ) );
             ps.executeUpdate();

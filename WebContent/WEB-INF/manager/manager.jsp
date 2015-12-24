@@ -30,12 +30,11 @@ window.history.forward(1);
             </div>
         </div>
     </div>
-
+<section>
 <%-- Welcome   <s:property value="namedis"/> --%>
     <section class="no-padding" id="portfolio">
         <div class="container-fluid">
             <div class="row no-gutter">
-            
                 <div class="col-lg-4 col-sm-6">
                 <s:url action="passviewman" var="welcome" />
                 <s:a href="%{welcome}" class="portfolio-box">
@@ -46,7 +45,24 @@ window.history.forward(1);
                                     Change Password
                                 </div>
                                 <div class="project-name">
-                                    Change Password
+                                    Change Profile Password
+                                </div>
+                            </div>
+                        </div>
+                    </s:a>
+                </div>
+                
+                <div class="col-lg-4 col-sm-6">
+                <s:url action="viewmanagerinfo" var="welc" />
+				 <s:a href="%{welc}" class="portfolio-box">
+                        <img src="img/portfolio/13.png" class="img-responsive" alt="">
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    View
+                                </div>
+                                <div class="project-name">
+                                    Check your general profile information
                                 </div>
                             </div>
                         </div>
@@ -59,10 +75,26 @@ window.history.forward(1);
                         <div class="portfolio-box-caption">
                             <div class="portfolio-box-caption-content">
                                 <div class="project-category text-faded">
-                                    Applications
+                                    Application List For Approval
                                 </div>
                                 <div class="project-name">
-                                    CHECK Applications for CREDIT CARD here..
+                                    Pending Application
+                                </div>
+                            </div>
+                        </div>
+                    </s:a>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                <s:url action="Clickme" var="hi"  /> 
+                <s:a href="%{hi}" disabled="true" class="portfolio-box">
+                        <img src="img/portfolio/13.png" class="img-responsive" alt="">
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    Bank Information
+                                </div>
+                                <div class="project-name">
+                                    View Information Regarding Bank Here
                                 </div>
                             </div>
                         </div>
@@ -75,10 +107,26 @@ window.history.forward(1);
                         <div class="portfolio-box-caption">
                             <div class="portfolio-box-caption-content">
                                 <div class="project-category text-faded">
-                                    Manager View Info
+                                    Employee Queries
                                 </div>
                                 <div class="project-name">
-                                    Manager can view his own info here
+                                     View employee queries and doubts
+                                </div>
+                            </div>
+                        </div>
+                    </s:a>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                <s:url action="logoutmanager" var="welcome" />
+                	<s:a href="%{welcome}" class="portfolio-box" >
+                        <img src="img/portfolio/13.png" class="img-responsive" alt="">
+                        <div class="portfolio-box-caption">
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-category text-faded">
+                                    Logout
+                                </div>
+                                <div class="project-name">
+                                    Logout From Profile
                                 </div>
                             </div>
                         </div>
@@ -86,7 +134,15 @@ window.history.forward(1);
                 </div>
             </div>
         </div>
-    </section>
-
+    </section></section>
+	<div class="navbar-nav navbar-inverse navbar-fixed-bottom">
+        <div class="container">
+        <div class="nav">
+        <ul class="nav navbar-nav navbar-right">
+                    <li class="page-scroll">
+          <a href="index.html"> Company Logo</a></li></ul>
+        </div> 
+        </div>
+    </div>
 </body>
 </html>

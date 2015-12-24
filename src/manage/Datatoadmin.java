@@ -20,7 +20,8 @@ import Utility.ScoringUtility;
  * @author yasham
  */
 public class Datatoadmin
-    extends ActionSupport implements SessionAware
+    extends ActionSupport
+    implements SessionAware
 {
 
     static Logger log = Logger.getLogger( ExternalInfo.class );
@@ -48,7 +49,9 @@ public class Datatoadmin
         try
         {
             con1 = utility.openDatabaseConnection();
-            String str = "update applicationid set status='completed' , level='manager' where app_no ='"+(String) sessionMap.get( "app_no" ) +"'";
+            String str = "update applicationid set status='completed' , level='manager', score='"
+                + (String) sessionMap.get( "totalscore" ) + "' where app_no ='" + (String) sessionMap.get( "app_no" )
+                + "'";
             PreparedStatement ps = con1.prepareStatement( str );
             ps.executeUpdate();
             con1.close();

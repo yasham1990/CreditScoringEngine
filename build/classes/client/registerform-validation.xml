@@ -56,14 +56,6 @@
         </field>
        
            
-          <field name="registerBean.emailofficial">
-        <field-validator type="requiredstring">
-            <message>Email is required</message>
-        </field-validator>
-          <field-validator type="email">
-            <message>Invalid Email</message>
-        </field-validator>
-        </field>
  
   </validators>
 

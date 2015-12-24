@@ -13,10 +13,16 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Creative - Start Bootstrap Theme</title>
+   <title>Credit Scoring Engine</title>
 
     <jsp:include page="/common.jsp"/>	
 <script type="text/javascript">
+		function go(action,formId)
+		{
+			var formIdSelector="form#"+formId;
+			$(formIdSelector).attr('action',action);
+			$(formIdSelector).submit();
+		}
     	function openUrl()
     	{
     		window.location="register.jsp";
@@ -36,7 +42,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand page-scroll" href="#page-top">Mobile Sensing Cloud</a>
+                <a class="navbar-brand page-scroll" href="#page-top">Credit Scoring Engine</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -45,21 +51,19 @@
                     <li>
                         <a class="page-scroll" href="#about">Login</a>
                     </li>
-                   <!--  <li>
-                        <a class="page-scroll" href="#services">Cards</a>
-                    </li>
                     <li>
-                        <a class="page-scroll" href="#portfolio">Rewards</a>
-                    </li> -->
+                    <s:url action="signupclient" var="wel"  /> 
+		                <s:a href="%{wel}" disabled="true">Sign Up</s:a>
+                    </li>
                     <li>
                         <a class="page-scroll" href="#policy">Policy</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#terms">Terms & Conditions</a>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a class="page-scroll" href="#contact">Reach Us</a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -97,27 +101,36 @@
     <section id="about">
         <div class="container">
 	            <div class="row">
-	             <div class="col-md-5 col-md-offset-4">
+	             <div class="col-md-6 col-md-offset-3">
 	            <div class="panel panel-default">
 	                <div class="panel-heading"> <strong class="">Official Login</strong>
 	
 	                </div>
 	                <div class="panel-body">
-                <form id="form1" method="post" action="loginclient" role="form">
-  						<div class="form-group">
-                            <s:radio name="official" list="{'Admin','Manager','Employee','User'}" />
+                	<form id="form1" method="post" action="loginclient" role="form" class="form-horizontal">
+                	<fieldset>
+                        <div class="form-group">
+                            <label for="userName" class="col-sm-2 control-label">Username</label>
+                            <div class="col-sm-10">
+                            <s:textfield name="userName" value="" class="form-control"/>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="userName" class="col-sm-4 control-label">Username</label>
-                            <s:textfield name="userName" value=""/>
+                            <label for="pass1" class="col-sm-2 control-label">Password</label>
+                            <div class="col-sm-10">
+                            <s:password name="pass1" value="" class="form-control"/>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="password" class="col-sm-4 control-label">Password</label>
-                            <s:password name="password" value=""/>
+  						<label class="control-label col-sm-4"   for=""></label>
+  						<div class="col-sm-10">
+                            <s:radio name="official" list="{'Admin','Manager','Employee','Clients'}" />
+                            </div>
                         </div>
-                        <div><s:url action="signupclient" var="wel"  /> 
-                <s:a href="%{wel}" disabled="true">Register here...</s:a></div>
-  <s:submit value="Login" cssClass="btn btn-success btn-sm" /> 
+		                <div class="text-right">
+		                <button type="button" class="btn btn-success" onclick="go('loginclient','form1')">Login</button>
+		                </div>
+		                </fieldset>
   </form>
             </div></div></div>
             
@@ -190,49 +203,30 @@
         
     </section>
 
-    <section id="contact">
+   <%--  <section id="contact">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 text-center">
                     <h2 class="section-heading">Let's Get In Touch!</h2>
                 </div>
                 </div>
-                 <div class="row col-md-5 col-md-offset-4">
+                 <div class="row col-md-6 col-md-offset-3">
             <div class="panel panel-default">
                 <div class="panel-heading"> <strong class="">Contact Form</strong>
 
                 </div>
                 <div class="panel-body">
    
-                <form id="form2" method="post" action="Reach">
+                <form id="form2" method="post" action="Reach" class="form-horizontal">
                 
-                 		<div class="form-group">
-                            <label for="myname" class="col-sm-3 control-label">Name</label>
-                             <s:textfield name="myname"  />
-                        </div>
-                        <div class="form-group">
-                            <label for="myemail" class="col-sm-3 control-label">Email</label>
-                             <s:textfield  name="myemail" />
-                        </div>
-                        <div class="form-group">
-                            <label for="mytelephone" class="col-sm-3 control-label">Mobile</label>
-                             <s:textfield name="mytelephone" />
-                        </div>
-                        <div class="form-group">
-                            <label for="message" class="col-sm-3 control-label">Comment</label>
-                             <s:textarea name="message" rows="6" cols="20" ></s:textarea>
-                        </div>
-                        <div class="col-sm-offset-3 col-sm-2">
- 							<s:submit  value="Submit" cssClass="btn btn-success btn-sm" />
- 							<s:submit action="clear" value="Cancel" cssClass="btn btn-success btn-sm" />
-               				</div>                                
+                 		
                     </form>
             </div>
 		</div>
 
             </div>
         </div>
-    </section>
+    </section> --%>
 
     <!-- jQuery -->
     <script src="js/jquery.js"></script>

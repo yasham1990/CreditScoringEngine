@@ -7,12 +7,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Admin Home Page</title>
 <jsp:include page="/common.jsp"/>
-
-
-
 <script type="text/javascript">
-window.history.forward(1);
-</script>
+    	function go(action)
+    	{
+    		//action='hello';
+    		$('form#form1').attr('action',action);
+    		
+    		//alert($('form#form1').attr('action'));
+    		$('form#form1').submit();
+    	}
+    </script>
 </head>
 <body>
 <div class="navbar-nav navbar-inverse navbar-fixed-top">
@@ -38,38 +42,41 @@ window.history.forward(1);
     <section>
 <div class="container">
 <div class="row">
-             <div class="col-md-5 col-md-offset-4">
+             <div class="col-sm-6 col-md-offset-3">
             <div class="panel panel-default">
-                <div class="panel-heading"> <strong class="">Application Request</strong>
-
+            <div class="panel-heading"> 
+            <strong class="">Bank Information</strong>
                 </div>
                 <div class="panel-body">
 
-      <form id="form1" method="post" action="bankinfoback" role="form">
+      <form id="form1" method="post" action="bankinfoback" role="form" class="form-horizontal">
       
       <div class="form-group">
             <label for="clientName" class="col-sm-4 control-label">Total Cards:</label>
-            <div class="col-sm-10">
-        <p class="form-control-static"><s:property value="totalcards"/></p></div>	
-      </div>
+        <s:property value="totalcards"/></div>	
       <div class="form-group">
             <label for="clientName" class="col-sm-4 control-label">No. Of Employees:</label>
-           <div class="col-sm-10"> <p class="form-control-static"><s:property value="employee"/></p></div>
+           <s:property value="employee"/>
       </div>
-      
       <div class="form-group">
             <label for="clientName" class="col-sm-4 control-label">Date Of Start:</label>
-           <div class="col-sm-10"> <p class="form-control-static"><s:property value="dos"/></p></div>
+           <s:property value="dos"/>
       </div>
-                       
-   <div class="form-group">   
-   <div class="col-sm-offset-2 col-sm-10">     
-  <s:submit value="back" cssClass="btn btn-success btn-sm" /> 
-  </div>
-  </div>
+                       <div class="text-center">
+   							<button type="button" class="btn btn-success" onclick="go('bankinfoback')">Back</button>
+   							</div>
   </form>   
 </div></div></div></div></div></section>
-
+<div class="navbar-nav navbar-inverse navbar-fixed-bottom">
+        <div class="container">
+        <div class="nav">
+        <ul class="nav navbar-nav navbar-right">
+                    <li class="page-scroll">
+          <a href="index.html"> Company Logo</a></li></ul>
+        </div> 
+       
+        </div>
+    </div>
 </body>
 </html>
 

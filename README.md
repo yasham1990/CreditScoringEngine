@@ -9,6 +9,8 @@ Technologies Covered
 =======================
 Java, J2EE, Struts2, SQL, Hibernate, AJAX
 
+![Alt text](https://github.com/yasham1990/CreditScoringEngineV2/blob/master/screenshots/Credit.png "Sign Up Screen")
+![Alt text](https://github.com/yasham1990/CreditScoringEngineV2/blob/master/screenshots/Credit22.png "Sign Up Screen")
 ![Alt text](https://github.com/yasham1990/CreditScoringEngineV2/blob/master/screenshots/credit1.png "Sign Up Screen")
 ![Alt text](https://github.com/yasham1990/CreditScoringEngineV2/blob/master/screenshots/Credit18.png "Sign Up Screen")
 ![Alt text](https://github.com/yasham1990/CreditScoringEngineV2/blob/master/screenshots/Credit4.png "Sign Up Screen")

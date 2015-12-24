@@ -1,0 +1,393 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <!-- Configuration for the default package. -->
+    <package name="default" extends="struts-default">
+        
+           <!-- *****************forhome************** -->
+        <action name="login1" class="Home.login">
+            <result name="input">/home.jsp</result>
+            <result name="success">/home/user.jsp</result>  
+        </action> 
+        
+         <action name="signupclient" method="signupclient" class="Home.login">
+         <interceptor-ref name="defaultStack">
+        		<param name="validation.excludeMethods">signupclient</param>
+    		</interceptor-ref>
+            <result name="input">/home.jsp</result>
+            <result name="signupclient">/WEB-INF/home/signupclient.jsp</result>   
+        </action>
+        
+        <action name="signupclientregister" class="Home.SignUpclient">
+            <result name="input">/WEB-INF/home/signupclient.jsp</result>
+            <result name="success">/home.jsp</result>   
+        </action>
+        
+         <action name="signupclientback" method="signupclientback" class="Home.SignUpclient">
+         <interceptor-ref name="defaultStack">
+        		<param name="validation.excludeMethods">signupclientback</param>
+    		</interceptor-ref>
+            <result name="input">/WEB-INF/home/signupclient.jsp</result>
+            <result name="signupclientback">/home.jsp</result>   
+        </action>
+        
+        <action name="clear" method="clearall" class="Home.Reach">
+            <result name="input">/home.jsp</result>
+            <result name="failure">/home.jsp</result>       
+        </action>
+        
+           <!-- ************for manager********** -->
+           
+       <action name="passviewman" method="passviewman" class="manage.Clickme">
+            <result name="input">/WEB-INF/manager/manager.jsp</result>
+            <result name="passviewman">/WEB-INF/manager/forpasswordman.jsp</result>
+       </action>
+       
+       <action name="forpassword"  class="manage.forpassword">
+            <result name="input">/WEB-INF/manager/forpasswordman.jsp</result>
+            <result name="success">/WEB-INF/manager/manager.jsp</result>
+       </action>
+       
+       <action name="passwordbackman" method="passwordbackman" class="manage.forpassword">
+       		<interceptor-ref name="defaultStack">
+        		<param name="validation.excludeMethods">passwordbackman</param>
+    		</interceptor-ref>
+            <result name="input">/WEB-INF/manager/forpasswordman.jsp</result>
+            <result name="passwordbackman">/WEB-INF/manager/manager.jsp</result>
+       </action>
+       
+       <action name="*Clickme" class="manage.Clickme">
+            <result name="input">/WEB-INF/manager/manager.jsp</result>
+            <result name="success">/WEB-INF/manager/toappreq.jsp</result>
+       </action>
+
+       <action name="appnoinfoback" method="appnoinfoback" class="manage.appnoinfo">
+       <interceptor-ref name="defaultStack">
+        		<param name="validation.excludeMethods">"appnoinfoback"</param>
+    		</interceptor-ref>
+            <result name="input">/WEB-INF/manager/toappreq.jsp</result>
+            <result name="appnoinfoback">/WEB-INF/manager/manager.jsp</result>
+       </action>
+       
+       <action name="appnoinfo" class="manage.appnoinfo">
+            <result name="input">/WEB-INF/manager/toappreq.jsp</result>
+            <result name="success">/WEB-INF/manager/Viewreqinfo.jsp</result>
+       </action>
+       
+       <action name="Clickmeback"  class="manage.Clickme">
+            <result name="input">/WEB-INF/manager/Viewreqinfo.jsp</result>
+            <result name="success">/WEB-INF/manager/toappreq.jsp</result>
+       </action>
+       
+       <action name="internalinfo" class="manage.InternalInfo">
+            <result name="input">/WEB-INF/manager/Viewreqinfo.jsp</result>
+            <result name="success">/WEB-INF/manager/internalinfo.jsp</result>
+       </action>
+       
+       <action name="internalback" method="internalback" class="manage.InternalInfo">
+             <result name="input">/WEB-INF/manager/internalinfo.jsp</result>
+             <result name="internalback">/WEB-INF/manager/Viewreqinfo.jsp</result>
+       </action>
+       
+       <action name="externalinfo" class="manage.ExternalInfo">
+             <result name="input">/WEB-INF/manager/Viewreqinfo.jsp</result>
+             <result name="success">/WEB-INF/manager/externalinfo.jsp</result>
+       </action>
+       
+       <action name="externalback" method="externalback" class="manage.ExternalInfo">
+             <result name="input">/WEB-INF/manager/externalinfo.jsp</result>
+             <result name="externalback">/WEB-INF/manager/Viewreqinfo.jsp</result>
+       </action>
+       
+       <action name="Generate" class="manage.Generate">
+             <result name="input">/WEB-INF/manager/Viewreqinfo.jsp</result>
+             <result name="failure">/WEB-INF/manager/hit.jsp</result>
+       </action>
+       
+       <action name="generateback" method="generateback" class="manage.Generate">
+             <result name="input">/WEB-INF/manager/hit.jsp</result>
+             <result name="generateback">/WEB-INF/manager/Viewreqinfo.jsp</result>
+       </action>
+       
+       <action name="Datatoadmin" class="manage.Datatoadmin">
+             <result name="input">/WEB-INF/manager/hit.jsp</result>
+             <result name="success">/WEB-INF/manager/manager.jsp</result>
+       </action>
+       
+       <action name="viewmanagerinfo" method="viewmanagerinfo" class="manage.Clickme">
+             <result name="input">/WEB-INF/manager/manager.jsp</result>
+             <result name="viewmanagerinfo">/WEB-INF/manager/ManageView.jsp</result>
+       </action>
+       
+       <action name="manageviewback" method="manageviewback" class="manage.ManagerView">
+             <result name="input">/WEB-INF/manager/ManageView.jsp</result>
+             <result name="manageviewback">/WEB-INF/manager/manager.jsp</result>
+       </action>
+       
+      <action name="logoutmanager"   class="manage.Logout">
+             <result name="input">/WEB-INF/manager/manager.jsp</result>
+             <result name="success">/home.jsp</result>
+       </action>
+             
+         <!-- *********for admin********** -->
+       <action name="adminapprovephoto"  method="adminapprovephoto" class="admin.mainclick">
+             <result name="input">/WEB-INF/Admin/Admin.jsp</result>
+             <result name="adminapprovephoto">/WEB-INF/Admin/apprequest.jsp</result>
+       </action>
+       
+       <action name="apprequestback" method="apprequestback" class="admin.toacceptpage">
+       <interceptor-ref name="defaultStack">
+        		<param name="validation.excludeMethods">apprequestback</param>
+    		</interceptor-ref>
+             <result name="input">/WEB-INF/Admin/apprequest.jsp</result>
+             <result name="apprequestback">/WEB-INF/Admin/Admin.jsp</result>
+       </action>
+       
+       <action name="toacceptpage"   class="admin.toacceptpage">
+             <result name="input">/WEB-INF/Admin/apprequest.jsp</result>
+             <result name="toaccept">/WEB-INF/Admin/adminappaccept.jsp</result>
+       </action>
+       
+       <action name="accept"   class="admin.accept">
+             <result name="input">/WEB-INF/Admin/adminappaccept.jsp</result>
+             <result name="accept">/WEB-INF/Admin/Admin.jsp</result>
+       </action>
+         
+       <action name="bankinfo"  class="admin.bankinfo">
+             <result name="input">/WEB-INF/Admin/Admin.jsp</result>
+             <result name="success">/WEB-INF/Admin/bankinfo.jsp</result>
+       </action>
+       
+       <action name="bankinfoback" method="bankinfoback"  class="admin.bankinfo">
+             <result name="input">/WEB-INF/Admin/bankinfo.jsp</result>
+             <result name="bankinfoback">/WEB-INF/Admin/Admin.jsp</result>
+       </action>
+       
+       <action name="managephoto"  method="managephoto" class="admin.mainclick">
+             <result name="input">/WEB-INF/Admin/Admin.jsp</result>
+             <result name="managephoto">/WEB-INF/Admin/Admineditview.jsp</result>
+       </action>
+       
+       <action name="admineditback"  method="admineditback" class="admin.AdminEdit">
+       		<interceptor-ref name="defaultStack">
+        		<param name="validation.excludeMethods">admineditback</param>
+    		</interceptor-ref>
+             <result name="input">/WEB-INF/Admin/Admineditview.jsp</result>
+             <result name="admineditback">/WEB-INF/Admin/Admin.jsp</result>
+       </action>
+             
+       <action name="adminedit"  class="admin.AdminEdit">
+             <result name="input">/WEB-INF/Admin/Admineditview.jsp</result>
+             <result name="adminedit">/WEB-INF/Admin/Adminedit.jsp</result>
+       </action>
+       
+       <action name="admininsert"  method="admininsert" class="admin.mainclick">
+             <result name="input">/WEB-INF/Admin/Admin.jsp</result>
+             <result name="admininsert">/WEB-INF/Admin/Adminedit.jsp</result>
+       </action>
+       
+       <action name="maninsert" method="mnginsert" class="admin.Mngaccountup">
+             <result name="input">/WEB-INF/Admin/Adminedit.jsp</result>
+             <result name="mnginsert">/WEB-INF/Admin/Admin.jsp</result>
+       </action>
+       
+       <action name="manupdate"  class="admin.Mngaccountup">
+             <result name="input">/WEB-INF/Admin/Adminedit.jsp</result>
+             <result name="mngupdate">/WEB-INF/Admin/Admin.jsp</result>
+       </action>
+            
+       <action name="mandelete"  method="mngdelete" class="admin.Mngaccountup">
+       <interceptor-ref name="defaultStack">
+        		<param name="validation.excludeMethods">mngdelete</param>
+    		</interceptor-ref>
+             <result name="input">/WEB-INF/Admin/Adminedit.jsp</result>
+             <result name="mngdelete">/WEB-INF/Admin/Admin.jsp</result>
+       </action>
+       
+       <action name="manback" method="mngback" class="admin.Mngaccountup">
+       <interceptor-ref name="defaultStack">
+        		<param name="validation.excludeMethods">mngback</param>
+    		</interceptor-ref>
+             <result name="input">/WEB-INF/Admin/Adminedit.jsp</result>
+             <result name="mngback">/WEB-INF/Admin/Admin.jsp</result>
+       </action>
+       
+       <action name="logoutadmin"  class="admin.Adminlogout">
+             <result name="input">/WEB-INF/Admin/Admin.jsp</result>
+             <result name="success">/home.jsp</result>
+       </action>
+      
+      
+      
+      
+      
+      
+      <!-- **********for employee only ***********-->
+       <action name="passview" method="passview" class="emp.click">
+             <result name="input">/WEB-INF/employee/employee.jsp</result>
+             <result name="passview">/WEB-INF/employee/passchange.jsp</result>
+       </action>
+        
+       <action name="emppassword"  class="emp.emppassword">
+             <result name="input">/WEB-INF/employee/passchange.jsp</result>
+             <result name="success">/WEB-INF/employee/employee.jsp</result>
+       </action>
+        
+       <action name="passback" method="passwordback" class="emp.emppassword">
+       <interceptor-ref name="defaultStack">
+        		<param name="validation.excludeMethods">passwordback</param>
+    		</interceptor-ref>
+             <result name="input">/WEB-INF/employee/passchange.jsp</result>
+             <result name="passwordback">/WEB-INF/employee/employee.jsp</result>
+       </action>
+        
+        <action name="employview" method="employview"  class="emp.click">
+             <result name="input">/WEB-INF/employee/employee.jsp</result>
+             <result name="employview">/WEB-INF/employee/empview.jsp</result>
+        </action>
+        
+        <action name="empviewback" class="emp.EmpView">
+             <result name="input">/WEB-INF/employee/empview.jsp</result> 
+             <result name="success">/WEB-INF/employee/employee.jsp</result>
+        </action>
+        
+        <action name="applist" class="emp.click">
+             <result name="input">/WEB-INF/employee/employee.jsp</result>
+             <result name="success">/WEB-INF/employee/applist.jsp</result>
+        </action>
+         
+        <action name="applistback" method="applistback" class="emp.Extverify">
+        <interceptor-ref name="defaultStack">
+        		<param name="validation.excludeMethods">applistback</param>
+    		</interceptor-ref>
+             <result name="input">/WEB-INF/employee/applist.jsp</result>
+             <result name="applistback">/WEB-INF/employee/employee.jsp</result>
+        </action>
+                  
+        <action name="extveri" class="emp.Extverify">
+             <result name="input">/WEB-INF/employee/applist.jsp</result>
+             <result name="success">/WEB-INF/employee/extverify.jsp</result>
+        </action>
+                 
+        <action name="forward"  class="emp.Forwardapp">
+             <result name="input">/WEB-INF/employee/extverify.jsp</result>
+             <result name="success">/WEB-INF/employee/employee.jsp</result>
+        </action>
+         
+        <action name="extverifyback" method="extverifyback" class="emp.Forwardapp">
+         <interceptor-ref name="defaultStack">
+        		<param name="validation.excludeMethods">extverifyback</param>
+    		</interceptor-ref>
+             <result name="input">/WEB-INF/employee/extverify.jsp</result>
+             <result name="extverifyback">/WEB-INF/employee/employee.jsp</result>
+        </action>
+        
+        <action name="logoutemp"   class="emp.Logoutemp">
+             <result name="input">/WEB-INF/employee/employee.jsp</result>
+             <result name="success">/home.jsp</result>
+        </action>
+         
+       <!-- **********for user********** -->
+        <action name="loginclient"   class="Home.login">
+             <result name="input">/home.jsp</result>
+             <result name="admin">/WEB-INF/Admin/Admin.jsp</result>
+             <result name="manager">/WEB-INF/manager/manager.jsp</result>   
+             <result name="employee">/WEB-INF/employee/employee.jsp</result>
+             <result name="user">/WEB-INF/client/User.jsp</result>
+        </action>
+        
+        <action name="logoutclient"   class="client.Logoutclient">
+             <result name="success">/home.jsp</result>
+        </action>
+        
+        <action name="clientpass" method="clientpass" class="client.clientclick">
+             <result name="input">/WEB-INF/client/User.jsp</result>
+             <result name="clientpass">/WEB-INF/client/clientpass.jsp</result>
+        </action>
+        
+        
+        <action name="clientpasschange"  class="client.clientpass" >
+             <result name="success">/WEB-INF/client/User.jsp</result>
+             <result name="input">/WEB-INF/client/clientpass.jsp</result>
+        </action>
+        
+        <action name="clientpasschangeback"  class="client.clientpass" method="back">
+        	<interceptor-ref name="defaultStack">
+        		<param name="validation.excludeMethods">back</param>
+    		</interceptor-ref>
+             <result name="back">/WEB-INF/client/User.jsp</result>
+             <result name="input">/WEB-INF/client/clientpass.jsp</result>
+        </action>
+        
+        <action name="applicationNew"  method="applicationStatus" class="client.clientclick">
+             <result name="input">/WEB-INF/client/User.jsp</result>
+             <result name="applicationStatus">/WEB-INF/client/ApplicationNew.jsp</result>
+        </action>
+        
+        <action name="registerClick"   class="client.ApplicationStatus">
+             <result name="input">/WEB-INF/client/ApplicationNew.jsp</result>
+             <result name="success">/WEB-INF/client/register.jsp</result>
+        </action>
+        
+        <action name="registerClickNewBack" method="registerClickNewBack"  class="client.ApplicationStatus">
+             <result name="input">/WEB-INF/client/ApplicationNew.jsp</result>
+             <result name="registerClickNewBack">/WEB-INF/client/User.jsp</result>
+        </action>
+         <action name="register" class="client.register">   
+            <result name="input">/WEB-INF/client/register.jsp</result>
+            <result name="success">/WEB-INF/client/registerform1.jsp</result>
+        </action>
+        
+        <action name="regisback" method="regisback" class="client.register">
+        <interceptor-ref name="defaultStack">
+        		<param name="validation.excludeMethods">regisback</param>
+    		</interceptor-ref>
+            <result name="input">/WEB-INF/client/register.jsp</result>
+            <result name="regisback">/WEB-INF/client/User.jsp</result>
+        </action>
+        
+        <action name="register1" class="client.registerform">
+            <result name="input">/WEB-INF/client/registerform1.jsp</result>
+            <result name="success">/WEB-INF/client/User.jsp</result>
+        </action>
+        
+       <action name="regisbackform" method="regisbackform" class="client.registerform">
+       <interceptor-ref name="defaultStack">
+        		<param name="validation.excludeMethods">regisbackform</param>
+    		</interceptor-ref>
+            <result name="input">/WEB-INF/client/registerform1.jsp</result>
+            <result name="regisbackform">/WEB-INF/client/register.jsp</result>
+       </action>
+        
+        <action name="applicationStatus"  method="applicationStatus" class="client.clientclick">
+             <result name="input">/WEB-INF/client/User.jsp</result>
+             <result name="applicationStatus">/WEB-INF/client/ApplicationStatus.jsp</result>
+        </action>
+        
+        <action name="applicationStatusBack" method="applicationStatusBack"   class="client.ApplicationStatus">
+             <result name="input">/WEB-INF/client/ApplicationStatus.jsp</result>
+             <result name="applicationStatusBack">/WEB-INF/client/User.jsp</result>
+        </action>
+        
+        <action name="clientdetailsclick"  method ="clientdetailsclick" class="client.clientclick">
+             <result name="input">/WEB-INF/client/User.jsp</result>
+             <result name="clientdetailsclick">/WEB-INF/client/clientview.jsp</result>
+        </action>
+        
+        <action name="clientviewupdate"  class="client.clientview">
+             <result name="input">/WEB-INF/client/clientview.jsp</result>
+             <result name="success">/WEB-INF/client/User.jsp</result>
+        </action>
+        
+        <action name="clientviewback"  method="clientviewback" class="client.clientview">
+        <interceptor-ref name="defaultStack">
+        		<param name="validation.excludeMethods">clientviewback</param>
+    		</interceptor-ref>
+             <result name="input">/WEB-INF/client/clientview.jsp</result>
+             <result name="clientviewback">/WEB-INF/client/User.jsp</result>
+        </action>
+        
+    </package>
+</struts>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+        "http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+
+<validators>
+
+<field name="registerBean.fname">
+    <field-validator type="requiredstring">
+    <message>First name is required</message>   
+    </field-validator>
+    <field-validator type="regex">
+            <param name="expression">^[A-Za-z ]{1,30}$ </param>
+            <message>Name can contain only characters</message>
+        </field-validator>
+   
+       </field>
+        
+    <field name="registerBean.lname">
+    <field-validator type="requiredstring">
+    <message>Last name is required</message>   
+    </field-validator>  
+    <field-validator type="regex">
+            <param name="expression">^[A-Za-z]{1,30}$ </param>
+            <message>Name can contain only characters</message>
+        </field-validator>
+    </field>
+    
+     <field name="registerBean.email">
+      <field-validator type="email">
+          <message>Invalid Email</message>
+      </field-validator>
+       <field-validator type="requiredstring">
+             <message>Email address is required.</message>
+        </field-validator>
+        </field>
+
+ <field name="registerBean.mobile">
+   <field-validator type="requiredstring">
+    <message> Mobile No. required.</message>
+   </field-validator>
+    <field-validator type="regex">
+            <param name="expression">^[0-9]{10,10}$</param>
+            <message>Mobile No. format XXXXXXXXXX</message>
+        </field-validator>
+   </field>
+    </validators>

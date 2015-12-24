@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+        "http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+
+
+<validators>
+    <field name="salary">
+   <field-validator type="requiredstring">
+    <message> Salary is required</message>
+   </field-validator>
+    <field-validator type="regex">
+            <param name="expression">^[0-9]{1,10}$</param>
+            <message>Only numerics are allowed</message>
+        </field-validator>
+   </field>
+     <field name="email">
+      <field-validator type="email">
+          <message>Invalid Email</message>
+      </field-validator>
+       <field-validator type="requiredstring">
+             <message>Email address is required</message>
+        </field-validator>
+        </field>
+
+ <field name="phone">
+   <field-validator type="requiredstring">
+    <message> Mobile No. required</message>
+   </field-validator>
+    <field-validator type="regex">
+            <param name="expression">^[0-9]{10,10}$</param>
+            <message>Phone No. format XXXXXXXXXX</message>
+        </field-validator>
+   </field>
+   
+    <field name="dob">
+    <field-validator type="required">
+    <message>Date Of Birth required</message>   
+    </field-validator>  
+     <field-validator type="date">
+  <param name="min">01/01/1945</param>
+  <param name="max">01/01/1990</param>
+  <message>Invalid Birth date dd/mm/yyyy </message>
+  </field-validator>
+    </field>
+    
+       <field name="doj">
+    <field-validator type="required">
+    <message>Date Of joining required</message>   
+    </field-validator>  
+     <field-validator type="date">
+  <param name="min">01/01/2012</param>
+  <param name="max">01/01/2020</param>
+  <message>Invalid joining date dd/mm/yyyy </message>
+  </field-validator>
+    </field>
+    </validators>

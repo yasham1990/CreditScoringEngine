@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+        "http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+
+<validators>
+  <field name="registerBean.prof">
+      <field-validator type="requiredstring">
+          <message>Select Profession from list</message>
+      </field-validator></field>
+       
+    
+        
+        <field name="registerBean.empName">
+        <field-validator type="requiredstring">
+            <message>Enter your Employee Id Card Name</message>
+        </field-validator>  
+        <field-validator type="regex">
+            <param name="expression">^[A-Za-z ]{1,30}$ </param>
+            <message>Name can contain only characters</message>
+        </field-validator>
+        </field>
+       
+       
+        <field name="registerBean.empId">
+        <field-validator type="requiredstring">
+            <message>Emplyee Id required</message>
+        </field-validator>    
+        </field>
+       
+       
+       <field name="registerBean.offNo">
+      <field-validator type="requiredstring">
+          <message>Phone no. required.</message>
+      </field-validator>
+      <field-validator type="regex">
+            <param name="expression">^[0-9]{10,10}$</param>
+            <message>Phone number format XXXXXXXXXX</message>
+        </field-validator>
+  </field>
+  
+    <field name="registerBean.dateJoin">
+       <field-validator type="required">
+      <message>Date of Joining required!</message>
+        </field-validator>
+        <field-validator type="date">
+  <param name="min">01/01/1970</param>
+  <param name="max">01/01/2015</param>
+  <message>Date Of Joining must be supplied between ${min} and ${max}</message>
+  </field-validator>
+       </field>
+       
+       <field name="registerBean.compAdd">
+        <field-validator type="requiredstring">
+            <message>Company Address required</message>
+        </field-validator>    
+        </field>
+       
+           
+          <field name="registerBean.emailofficial">
+        <field-validator type="requiredstring">
+            <message>Email is required</message>
+        </field-validator>
+          <field-validator type="email">
+            <message>Invalid Email</message>
+        </field-validator>
+        </field>
+ 
+  </validators>
+
+
+

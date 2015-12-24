@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE validators PUBLIC "-//Apache Struts//XWork Validator 1.0.3//EN"
+        "http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+
+<validators>
+     
+     <field name="registerBean.salu">
+    <field-validator type="requiredstring">
+    <message>Salutation required</message>   
+    </field-validator>         
+    </field>
+     
+     <field name="registerBean.dob">
+    <field-validator type="required">
+    <message>Date Of Birth required</message>   
+    </field-validator>  
+     <field-validator type="date">
+  <param name="min">01/01/1945</param>
+  <param name="max">01/01/1995</param>
+  <message>Invalid Birth date</message>
+  </field-validator>
+    </field>
+        
+  
+   
+   <field name="registerBean.city">
+   <field-validator type="requiredstring">
+    <message>Select City from list</message>   
+   </field-validator>         
+   </field>
+   
+    <field name="registerBean.state">
+   <field-validator type="requiredstring">
+    <message>Select State from list</message>   
+   </field-validator>         
+   </field>
+   
+    <field name="registerBean.country">
+   <field-validator type="requiredstring">
+    <message>Select Country from list</message>   
+   </field-validator>         
+   </field>
+   
+   
+   <field name="registerBean.mobile">
+   <field-validator type="requiredstring">
+    <message> Mobile No. required</message>
+   </field-validator>
+    <field-validator type="regex">
+            <param name="expression">^[0-9]{10,10}$</param>
+            <message>Mobile No. format XXXXXXXXXX</message>
+        </field-validator>
+   </field>
+   
+        <field name="registerBean.sex">
+   <field-validator type="requiredstring">
+    <message> Please Mark appropiate value</message>
+   </field-validator>
+   </field>
+   <field name="registerBean.status">
+   <field-validator type="requiredstring">
+    <message> Marital status is required</message>
+   </field-validator>
+   </field>
+
+    <field name="registerBean.door">   
+   <field-validator type="requiredstring">
+    <message>Door No. required</message>   
+   </field-validator>
+    </field>
+
+    
+     <field name="registerBean.pan">   
+      <field-validator type="requiredstring">
+    <message>Pan No. required</message>   
+   </field-validator>
+  <field-validator type="regex">
+             <param name="expression">^[A-Za-z0-9]{10}$</param>
+             <message>Please Enter correct pan no.</message>
+        </field-validator>
+    </field>
+    
+    <field name="registerBean.lmark">   
+   <field-validator type="requiredstring">
+    <message>Landmark is required</message>   
+   </field-validator>
+    </field>
+    
+    <field name="registerBean.zip">   
+   <field-validator type="requiredstring">
+    <message>Zip Code required</message>   
+   </field-validator>
+    <field-validator type="regex">  
+   <param name="expression">^[0-9]{6,6}$</param>  
+   <message>Invalid Zip Code</message>  
+ </field-validator>  
+    </field>
+  
+</validators>

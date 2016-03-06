@@ -4,11 +4,9 @@
  */
 package admin;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -19,8 +17,10 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.util.ValueStack;
 
+import Home.EmployeeManagement;
 import Utility.ScoringUtility;
-import emp.Extverify;
+import hibernatemapping.Applicationid;
+import hibernatemapping.Client;
 
 /**
  * @author yasham
@@ -33,9 +33,7 @@ public class toacceptpage
 
     static Logger log = Logger.getLogger( toacceptpage.class );
 
-    ScoringUtility utility = null;
-
-    Connection con1 = null;
+    EmployeeManagement employeeManagement = null;
 
     @Override
     public void setSession( Map<String, Object> sessionMap )
@@ -56,24 +54,20 @@ public class toacceptpage
     public String execute()
         throws Exception
     {
-        utility = new ScoringUtility();
         try
         {
+            employeeManagement = new EmployeeManagement();
             ValueStack stack = ActionContext.getContext().getValueStack();
             Map<String, String> context = new HashMap<String, String>();
-            con1 = utility.openDatabaseConnection();
-            String str = "select score, CONCAT_WS(' ', c_firstname,c_lastname) as name from clients, "
-                + "applicationid where applicationid.primarykey=clients.applicationid_primarykey and app_no='"
-                + getId() + "'";
-            java.sql.Statement stmt = con1.createStatement();
-            ResultSet rs = stmt.executeQuery( str );
-            if ( rs != null && rs.next() )
+            Applicationid applicationid =
+                            employeeManagement.getApplicationidByAppno( getId() );
+            Client client = employeeManagement.getClientAppId( applicationid.getPrimarykey() );
+            if ( client != null )
             {
-                context.put( "name", rs.getString( 2 ) );
-                context.put( "score", rs.getString( 1 ) );
+                context.put( "name", client.getFirstname() + " " + client.getLastname() );
+                context.put( "score", client.getApplicationPrimaryKey().getScore() + "" );
                 sessionMap.put( "app_no", getId() );
             }
-            con1.close();
             stack.push( context );
         }
         catch ( Exception e )
@@ -104,25 +98,18 @@ public class toacceptpage
             addFieldError( "id", "Application Id is required" );
         if ( id.length() != 0 )
         {
-            int flag = 1;
             try
             {
-                utility = new ScoringUtility();
-                con1 = utility.openDatabaseConnection();
-                String str = "SELECT app_no FROM applicationid where app_no='" + getId() + "'";
-                Statement stmt = con1.createStatement();
-                ResultSet rs = stmt.executeQuery( str );
-
-                if ( rs != null && rs.next() )
-                    flag = 0;
-                con1.close();
+                employeeManagement = new EmployeeManagement();
+                Applicationid applicationid =
+                    employeeManagement.getApplicationidByAppno( getId() );
+                if ( applicationid == null )
+                    addFieldError( "id", "Invalid application id" );
             }
             catch ( Exception e )
             {
                 log.error( e.getMessage() );
             }
-            if ( flag == 1 )
-                addFieldError( "id", "Invalid application id" );
         }
     }
 }

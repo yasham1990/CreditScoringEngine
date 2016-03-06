@@ -37,7 +37,7 @@ window.history.forward(1);
         <div class="container-fluid">
             <div class="row no-gutter">
             <div class="col-lg-4 col-sm-6">
-                <s:url action="passview" var="welcome" />
+                <s:url action="adminpassview" var="welcome" />
                 <s:a href="%{welcome}" class="portfolio-box">
 	                        <img src="img/portfolio/13.png" class="img-responsive" alt="">
                         <div class="portfolio-box-caption">

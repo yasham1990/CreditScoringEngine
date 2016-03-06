@@ -4,17 +4,20 @@
  */
 package manage;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.interceptor.SessionAware;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import Utility.ScoringUtility;
+import Home.EmployeeManagement;
+import Utility.HibernateUtil;
+import hibernatemapping.Applicationid;
 
 /**
  * @author yasham
@@ -24,14 +27,11 @@ public class Datatoadmin
     implements SessionAware
 {
 
-    static Logger log = Logger.getLogger( ExternalInfo.class );
+    static Logger log = Logger.getLogger( Datatoadmin.class );
 
     private SessionMap<String, Object> sessionMap;
 
-    ScoringUtility utility = null;
-
-    Connection con1 = null;
-
+    EmployeeManagement employeeManagement = null;
     @Override
     public void setSession( Map<String, Object> sessionMap )
     {
@@ -45,16 +45,24 @@ public class Datatoadmin
     public String execute()
         throws Exception
     {
-        utility = new ScoringUtility();
         try
         {
-            con1 = utility.openDatabaseConnection();
-            String str = "update applicationid set status='completed' , level='manager', score='"
-                + (String) sessionMap.get( "totalscore" ) + "' where app_no ='" + (String) sessionMap.get( "app_no" )
-                + "'";
-            PreparedStatement ps = con1.prepareStatement( str );
-            ps.executeUpdate();
-            con1.close();
+            employeeManagement=new EmployeeManagement();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria( Applicationid.class );
+            criteria.add( Restrictions.eq( "app_no", String.valueOf( sessionMap.get( "app_no" ) ) ));
+            Applicationid applicationid = (Applicationid) criteria.uniqueResult();
+            if ( applicationid != null )
+            {
+                applicationid.setStatus( "completed" );
+                applicationid.setLevel( "manager" );
+                applicationid.setScore( Integer.parseInt( (String)sessionMap.get( "totalscore" ) ) );
+            }
+            session.merge( applicationid );
+            session.saveOrUpdate( applicationid );
+            session.getTransaction().commit();
+            
         }
         catch ( Exception e )
         {

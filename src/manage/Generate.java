@@ -1,9 +1,6 @@
 
 package manage;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +12,9 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.util.ValueStack;
 
-import Utility.ScoringUtility;
+import Home.EmployeeManagement;
+import hibernatemapping.Applicationid;
+import hibernatemapping.ExternalVerification;
 
 public class Generate
     extends ActionSupport
@@ -26,9 +25,7 @@ public class Generate
 
     private SessionMap<String, Object> sessionMap;
 
-    ScoringUtility utility = null;
-
-    Connection con1 = null;
+    EmployeeManagement employeeManagement = null;
 
     @Override
     public void setSession( Map<String, Object> sessionMap )
@@ -55,146 +52,142 @@ public class Generate
     {
         try
         {
-            utility = new ScoringUtility();
-            con1 = utility.openDatabaseConnection();
+            employeeManagement=new EmployeeManagement();
             ValueStack stack = ActionContext.getContext().getValueStack();
             Map<String, String> context = new HashMap<String, String>();
-            String str =
-                "select applicationid_primarykey,ex_income,ex_address,ex_tax,ex_billpay,ex_otherbank,ex_nfd,"
-                + "ex_default,ex_hpaid,ex_crime,ex_lic,ex_agland,ex_otherinc,ex_cpaid from extverify1 "
-                + "where applicationid_primarykey='" + sessionMap.get( "primarykey_app" ) + "'";
-            Statement stmt = con1.createStatement();
-            ResultSet rs = stmt.executeQuery( str );
-
-            if ( rs != null && rs.next() )
+            Applicationid applicationid=employeeManagement.getApplicationidByPrimarykey( (int) sessionMap.get( "primarykey_app" ) );
+            ExternalVerification externalVerification =
+                employeeManagement.getExternalVerificationAppId( applicationid );
+            if ( externalVerification != null )
             {
-                    Float income;
-                    income = Float.valueOf( rs.getString( 2 ) );
-                    if ( income >= 30000 && income <= 70000 )
-                        score += 10;
-                    else if ( income >= 70000 && income <= 150000 )
-                        score += 20;
-                    else
-                        score += 30;
-                    totscore += score;
-                    context.put( "income1", score.toString() );
+                Float income;
+                income = Float.valueOf( externalVerification.getEx_income() );
+                if ( income >= 30000 && income <= 70000 )
+                    score += 10;
+                else if ( income >= 70000 && income <= 150000 )
+                    score += 20;
+                else
+                    score += 30;
+                totscore += score;
+                context.put( "income1", score.toString() );
+                score = 0;
+                if ( "yes".equalsIgnoreCase( externalVerification.getEx_address() ) )
+                    score += 10;
+                else
                     score = 0;
-                    if ( "yes".equalsIgnoreCase( rs.getString( 3 ) ) )
-                        score += 10;
-                    else
-                        score = 0;
-                    totscore += score;
-                    context.put( "address", score.toString() );
+                totscore += score;
+                context.put( "address", score.toString() );
+                score = 0;
+                int defaulttax = 0;
+                defaulttax = Integer.parseInt( externalVerification.getEx_default() );
+                if ( defaulttax == 0 )
+                    score += 10;
+                else if ( defaulttax == 1 )
+                    score += -4;
+                else if ( defaulttax == 2 )
+                    score += -6;
+                else
+                    score += -10;
+                totscore += score;
+                context.put( "taxpay", score.toString() );
+                score = 0;
+                if ( "ontime".equalsIgnoreCase( externalVerification.getEx_billpay() ) )
+                    score += 10;
+                else
+                    score = -5;
+                totscore += score;
+                context.put( "billpay", score.toString() );
+                score = 0;
+                if ( "yes".equalsIgnoreCase( externalVerification.getEx_otherbank() ) )
+                    score += 10;
+                else
                     score = 0;
-                    int defaulttax=0;
-                    defaulttax = Integer.parseInt( rs.getString( 4 ) );
-                    if ( defaulttax == 0 )
-                        score += 10;
-                    else if ( defaulttax == 1 )
-                        score += -4;
-                    else if ( defaulttax == 2 )
-                        score += -6;
-                    else
-                        score += -10;
-                    totscore += score;
-                    context.put( "taxpay", score.toString() );
+                totscore += score;
+                context.put( "otherbank", score.toString() );
+                score = 0;
+                int nfd1 = 0;
+                nfd1 = Integer.parseInt( externalVerification.getEx_nfd() );
+                if ( nfd1 == 0 )
+                    score += 0;
+                else if ( nfd1 == 1 )
+                    score += 4;
+                else if ( nfd1 == 2 )
+                    score += 6;
+                else
+                    score += 10;
+                totscore += score;
+                context.put( "nfd", score.toString() );
+                score = 0;
+                int bankdefault1 = 0;
+                bankdefault1 = Integer.parseInt( externalVerification.getEx_default() );
+                if ( bankdefault1 == 0 )
+                    score += 10;
+                else if ( bankdefault1 == 1 )
+                    score += -4;
+                else if ( bankdefault1 == 2 )
+                    score += -6;
+                else
+                    score += -10;
+                totscore += score;
+                context.put( "bankdefault", score.toString() );
+                score = 0;
+                if ( "regular".equalsIgnoreCase( externalVerification.getEx_hpaid() )
+                    || "NotAvailable".equalsIgnoreCase( externalVerification.getEx_hpaid() ) )
                     score = 0;
-                    if ( "ontime".equalsIgnoreCase( rs.getString( 5 ) ) )
-                        score += 10;
-                    else
-                        score = -5;
-                    totscore += score;
-                    context.put( "billpay", score.toString() );
+                else
+                    score += -5;
+                totscore += score;
+                context.put( "loanpaidhome", score.toString() );
+                score = 0;
+                if ( "regular".equalsIgnoreCase( externalVerification.getEx_cpaid() )
+                    || "NotAvailable".equalsIgnoreCase( externalVerification.getEx_cpaid() ) )
                     score = 0;
-                    if ( "yes".equalsIgnoreCase( rs.getString( 6 ) ) )
-                        score += 10;
-                    else
-                        score = 0;
-                    totscore += score;
-                    context.put( "otherbank", score.toString() );
+                else
+                    score += -5;
+                totscore += score;
+                context.put( "loanpaidcar", score.toString() );
+                score = 0;
+                if ( "no".equalsIgnoreCase( externalVerification.getEx_crime() ) )
                     score = 0;
-                    int nfd1=0;
-                    nfd1 = Integer.parseInt( rs.getString( 7 ) );
-                    if ( nfd1 == 0 )
-                        score += 0;
-                    else if ( nfd1 == 1 )
-                        score += 4;
-                    else if ( nfd1 == 2 )
-                        score += 6;
-                    else
-                        score += 10;
-                    totscore += score;
-                    context.put( "nfd", score.toString() );
+                else
+                    score += -5;
+                totscore += score;
+                context.put( "criminalrecord", score.toString() );
+                score = 0;
+                if ( Integer.parseInt( externalVerification.getEx_lic() ) == 0 )
+                    score += 0;
+                else if ( Integer.parseInt( externalVerification.getEx_lic() ) == 1 )
+                    score += 4;
+                else if ( Integer.parseInt( externalVerification.getEx_lic() ) == 2 )
+                    score += 6;
+                else
+                    score += 10;
+                totscore += score;
+                context.put( "lic", score.toString() );
+                score = 0;
+                Float aggland1;
+                aggland1 = Float.valueOf( externalVerification.getEx_agland() );
+                if ( aggland1 == 0 )
                     score = 0;
-                    int bankdefault1=0;
-                    bankdefault1 = Integer.parseInt( rs.getString( 8 ) );
-                    if ( bankdefault1 == 0 )
-                        score += 10;
-                    else if ( bankdefault1 == 1 )
-                        score += -4;
-                    else if ( bankdefault1 == 2 )
-                        score += -6;
-                    else
-                        score += -10;
-                    totscore += score;
-                    context.put( "bankdefault", score.toString() );
+                else if ( aggland1 == 500 )
+                    score += 10;
+                else if ( aggland1 == 1000 )
+                    score += 20;
+                else
+                    score += 30;
+                totscore += score;
+                context.put( "aggland", score.toString() );
+                score = 0;
+                if ( "yes".equalsIgnoreCase( externalVerification.getEx_otherinc() ) )
+                    score += 10;
+                else
                     score = 0;
-                    if ( "regular".equalsIgnoreCase( rs.getString( 9 ) ) || "NotAvailable".equalsIgnoreCase( rs.getString( 9 ) ) )
-                        score = 0;
-                    else
-                        score += -5;
-                    totscore += score;
-                    context.put( "loanpaidhome", score.toString() );
-                    score = 0;
-                    if ( "regular".equalsIgnoreCase( rs.getString( 14 ) ) || "NotAvailable".equalsIgnoreCase( rs.getString( 14 ) ) )
-                        score = 0;
-                    else
-                        score += -5;
-                    totscore += score;
-                    context.put( "loanpaidcar", score.toString() );
-                    score = 0;
-                    if ( "no".equalsIgnoreCase( rs.getString( 10 ) ) )
-                        score = 0;
-                    else
-                        score += -5;
-                    totscore += score;
-                    context.put( "criminalrecord", score.toString() );
-                    score = 0;
-                    if ( rs.getInt( 11 ) == 0 )
-                        score += 0;
-                    else if ( rs.getInt( 11 ) == 1 )
-                        score += 4;
-                    else if ( rs.getInt( 11 ) == 2 )
-                        score += 6;
-                    else
-                        score += 10;
-                    totscore += score;
-                    context.put( "lic", score.toString() );
-                    score = 0;
-                    Float aggland1;
-                    aggland1 = Float.valueOf( rs.getString( 12 ) );
-                    if ( aggland1 == 0 )
-                        score = 0;
-                    else if ( aggland1 == 500 )
-                        score += 10;
-                    else if ( aggland1 == 1000 )
-                        score += 20;
-                    else
-                        score += 30;
-                    totscore += score;
-                    context.put( "aggland", score.toString() );
-                    score = 0;
-                    if ( "yes".equalsIgnoreCase( rs.getString( 13 ) ) )
-                        score += 10;
-                    else
-                        score = 0;
-                    totscore += score;
-                    context.put( "otherinc", score.toString() );
-                    context.put( "totscore", totscore.toString() );
-                    sessionMap.put( "totalscore", totscore.toString() );
-                }
+                totscore += score;
+                context.put( "otherinc", score.toString() );
+                context.put( "totscore", totscore.toString() );
+                sessionMap.put( "totalscore", totscore.toString() );
+            }
             stack.push( context );
-            con1.close();
         }
         catch ( Exception e )
         {

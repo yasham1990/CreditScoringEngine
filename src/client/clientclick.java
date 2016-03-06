@@ -1,9 +1,6 @@
 
 package client;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,16 +15,15 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.util.ValueStack;
 
-import Utility.ScoringUtility;
+import Home.EmployeeManagement;
+import hibernatemapping.Applicationid;
+import hibernatemapping.Client;
 
 public class clientclick
     extends ActionSupport
     implements SessionAware
 {
-
-    ScoringUtility utility = null;
-
-    Connection con1 = null;
+    EmployeeManagement employeeManagement = null;
 
     final static private String CLIENTPASS = "clientpass";
 
@@ -94,21 +90,17 @@ public class clientclick
 
     public String clientpass()
     {
-        utility = new ScoringUtility();
         try
         {
+            employeeManagement = new EmployeeManagement();
             ValueStack stack = ActionContext.getContext().getValueStack();
             Map<String, Object> context = new HashMap<String, Object>();
-            con1 = utility.openDatabaseConnection();
-            String str = "select c_email from clients where primarykey='" + sessionMap.get( "primarykey" ) + "'";
-            Statement stmt = con1.createStatement();
-            ResultSet rs = stmt.executeQuery( str );
-            if ( rs != null && rs.next() )
+            Client client = employeeManagement.getClientByPrimarykey( (int) sessionMap.get( "primarykey" ) );
+            if ( client != null )
             {
-                context.put( "email", rs.getString( 1 ) );
+                context.put( "email", client.getEmail() );
                 stack.push( context );
             }
-            con1.close();
         }
         catch ( Exception e )
         {
@@ -125,22 +117,21 @@ public class clientclick
 
     public String applicationNew()
     {
-        utility = new ScoringUtility();
         try
         {
+            employeeManagement = new EmployeeManagement();
             HttpServletRequest request = ServletActionContext.getRequest();
             request.setAttribute( "isOld", "true" );
-            con1 = utility.openDatabaseConnection();
-            String str =
-                "select status from applicationid where primarykey in (select applicationid_primarykey from clients where primarykey='"
-                    + sessionMap.get( "primarykey" ) + "')";
-            Statement stmt = con1.createStatement();
-            ResultSet rs = stmt.executeQuery( str );
-            if ( rs.isBeforeFirst() == false )
+            Applicationid applicationid = null;
+            Client client = employeeManagement.getClientByPrimarykey( (int) sessionMap.get( "primarykey" ) );
+            if ( client != null && client.getApplicationPrimaryKey()!=null )
+                applicationid =
+                    employeeManagement.getApplicationidByPrimarykey( ( client.getApplicationPrimaryKey() ).getPrimarykey() );
+
+            if ( applicationid == null )
                 request.setAttribute( "filed", "" );
             else
                 request.setAttribute( "filed", "alreadyfiled" );
-            con1.close();
         }
         catch ( Exception e )
         {
@@ -152,44 +143,46 @@ public class clientclick
 
     public String applicationStatus()
     {
-        utility = new ScoringUtility();
         try
         {
+            employeeManagement = new EmployeeManagement();
+            Applicationid applicationid = null;
+            Client client = employeeManagement.getClientByPrimarykey( (Integer) sessionMap.get( "primarykey" ) );
+            if ( client != null && client.getApplicationPrimaryKey()!=null )
+                applicationid =
+                    employeeManagement.getApplicationidByPrimarykey( ( client.getApplicationPrimaryKey() ).getPrimarykey() );
+
             HttpServletRequest request = ServletActionContext.getRequest();
             ValueStack stack = ActionContext.getContext().getValueStack();
             Map<String, Object> context = new HashMap<String, Object>();
-            con1 = utility.openDatabaseConnection();
-            String str =
-                "select status,level from applicationid where primarykey in (select applicationid_primarykey from clients where primarykey='"
-                    + sessionMap.get( "primarykey" ) + "')";
-            Statement stmt = con1.createStatement();
-            ResultSet rs = stmt.executeQuery( str );
-            if ( rs.isBeforeFirst() == false )
+            if ( applicationid == null )
                 request.setAttribute( "filed", "" );
             else
             {
                 request.setAttribute( "filed", "alreadyfiled" );
-                if ( rs != null && rs.next() )
-                {
-                if ( "completed".equalsIgnoreCase( rs.getString( 1 ) ) && "employee".equalsIgnoreCase( rs.getString( 2 ) ) )
+                if ( "completed".equalsIgnoreCase( applicationid.getStatus() )
+                    && "employee".equalsIgnoreCase( applicationid.getLevel() ) )
                 {
                     context.put( "percentage", "50" );
                     context.put( "status", "Processing" );
                     context.put( "level", "Manager" );
                 }
-                else if ( "completed".equalsIgnoreCase( rs.getString( 1 ) ) && "manager".equalsIgnoreCase( rs.getString( 2 ) ) )
+                else if ( "completed".equalsIgnoreCase( applicationid.getStatus() )
+                    && "manager".equalsIgnoreCase( applicationid.getLevel() ) )
                 {
                     context.put( "percentage", "80" );
                     context.put( "status", "Processing" );
                     context.put( "level", "Admin" );
                 }
-                else if ( "approved".equalsIgnoreCase( rs.getString( 1 ) ) && "admin".equalsIgnoreCase( rs.getString( 2 ) ) )
+                else if ( "approved".equalsIgnoreCase( applicationid.getStatus() )
+                    && "admin".equalsIgnoreCase( applicationid.getLevel() ) )
                 {
                     context.put( "percentage", "100" );
                     context.put( "status", "Approved" );
                     context.put( "level", "Admin" );
                 }
-                else if ( "rejected".equalsIgnoreCase( rs.getString( 1 ) ) && "admin".equalsIgnoreCase( rs.getString( 2 ) ) )
+                else if ( "rejected".equalsIgnoreCase( applicationid.getStatus() )
+                    && "admin".equalsIgnoreCase( applicationid.getLevel() ) )
                 {
                     context.put( "percentage", "100" );
                     context.put( "status", "Rejected" );
@@ -201,10 +194,8 @@ public class clientclick
                     context.put( "status", "Processing" );
                     context.put( "level", "Employee" );
                 }
-                }
-                stack.push( context );
             }
-            con1.close();
+            stack.push( context );
         }
         catch ( Exception e )
         {
@@ -219,30 +210,24 @@ public class clientclick
 
     public String clientdetailsclick()
     {
-        utility = new ScoringUtility();
         try
         {
+            employeeManagement = new EmployeeManagement();
             ValueStack stack = ActionContext.getContext().getValueStack();
             Map<String, Object> context = new HashMap<String, Object>();
-            con1 = utility.openDatabaseConnection();
-            String str =
-                "select c_firstname,c_lastname,c_phone,c_email,(select app_no from applicationid where primarykey=applicationid_primarykey) "
-                    + " from clients where primarykey='" + sessionMap.get( "primarykey" ) + "'";
-            Statement stmt = con1.createStatement();
-            ResultSet rs = stmt.executeQuery( str );
-            if ( rs != null && rs.next() )
+            Client client = employeeManagement.getClientByPrimarykey( (Integer) sessionMap.get( "primarykey" ) );
+            if ( client != null )
             {
-                context.put( "fname", rs.getString( 1 ) );
-                context.put( "lname", rs.getString( 2 ) );
-                context.put( "mobile", rs.getString( 3 ) );
-                context.put( "email", rs.getString( 4 ) );
-                if ( rs.getString( 5 ) != null )
-                    context.put( "app_no", rs.getString( 5 ) );
+                context.put( "fname", client.getFirstname() );
+                context.put( "lname", client.getLastname() );
+                context.put( "mobile", client.getPhone() );
+                context.put( "email", client.getEmail() );
+                if ( client.getApplicationPrimaryKey() != null )
+                    context.put( "app_no", client.getApplicationPrimaryKey().getPrimarykey() );
                 else
                     context.put( "app_no", "" );
                 stack.push( context );
             }
-            con1.close();
         }
         catch ( Exception e )
         {

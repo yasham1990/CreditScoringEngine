@@ -1,8 +1,6 @@
 
 package admin;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,15 +10,14 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.util.ValueStack;
 
-import Utility.ScoringUtility;
+import Home.EmployeeManagement;
+import hibernatemapping.Bankinfo;
 
 public class bankinfo
     extends ActionSupport
 {
 
-    ScoringUtility utility = null;
-
-    Connection con1 = null;
+    EmployeeManagement employeeManagement = null;
 
     static Logger log = Logger.getLogger( bankinfo.class );
 
@@ -38,23 +35,19 @@ public class bankinfo
     public String execute()
         throws Exception
     {
-        utility = new ScoringUtility();
+        employeeManagement = new EmployeeManagement();
         try
         {
             ValueStack stack = ActionContext.getContext().getValueStack();
             Map<String, Object> context = new HashMap<String, Object>();
-            con1 = utility.openDatabaseConnection();
-            String str = "select totalcards,employee,dos from bankinfo";
-            java.sql.Statement stmt = con1.createStatement();
-            ResultSet rs = stmt.executeQuery( str );
-            while ( rs.next() )
+            Bankinfo bankinfo = employeeManagement.getBankInfo();
+            if ( bankinfo != null )
             {
-                context.put( "totalcards", rs.getString( 1 ) );
-                context.put( "employee", rs.getString( 2 ) );
-                context.put( "dos", rs.getDate( 3 ) );
+                context.put( "totalcards", bankinfo.getTotalcards() );
+                context.put( "employee", bankinfo.getNumberofemployee() );
+                context.put( "dos", bankinfo.getDateofstart() );
             }
             stack.push( context );
-            con1.close();
         }
         catch ( Exception e )
         {

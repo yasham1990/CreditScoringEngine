@@ -1,9 +1,6 @@
 
 package admin;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,13 +9,20 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.interceptor.SessionAware;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.util.ValueStack;
 
-import Utility.ScoringUtility;
+import Home.EmployeeManagement;
+import Utility.HibernateUtil;
 import emp.click;
+import hibernatemapping.Applicationid;
+import hibernatemapping.Employee;
 
 /**
  * @author yasham
@@ -32,10 +36,7 @@ public class mainclick
 
     static Logger log = Logger.getLogger( click.class );
 
-    ScoringUtility utility = null;
-
-    Connection con1 = null;
-
+    EmployeeManagement employeeManagement = null;
     @Override
     public void setSession( Map<String, Object> sessionMap )
     {
@@ -43,6 +44,8 @@ public class mainclick
     }
 
     final static private String ADMINEDITBACK = "admineditback";
+    
+    final static private String ADMINPASSVIEW = "adminpassview";
 
     final static private String ADMININSERT = "admininsert";
 
@@ -68,28 +71,22 @@ public class mainclick
 
     public String adminapprovephoto()
     {
-        utility = new ScoringUtility();
+        employeeManagement = new EmployeeManagement();
         try
         {
             h1 = new ArrayList<String>();
             ValueStack stack = ActionContext.getContext().getValueStack();
             Map<String, List<String>> context = new HashMap<String, List<String>>();
-            con1 = utility.openDatabaseConnection();
-            String str = "SELECT app_no FROM applicationid where status='completed' and level='manager'";
-            Statement stmt = con1.createStatement();
-            ResultSet rs = stmt.executeQuery( str );
-            if ( rs.isBeforeFirst() == false )
-            {
+            List<Applicationid> applicationids = employeeManagement.getApplicationidList( "completed", "manager" );
+            if ( applicationids == null || applicationids.isEmpty() )
                 h1.add( "There is no application request pending" );
-            }
             else
             {
-                while ( rs.next() )
-                    h1.add( rs.getString( 1 ) );
+                for ( Applicationid applicationid : applicationids )
+                    h1.add( applicationid.getApp_no() );
             }
             context.put( "h1", h1 );
             stack.push( context );
-            con1.close();
         }
         catch ( Exception e )
         {
@@ -98,33 +95,57 @@ public class mainclick
         return ADMINAPPROVEPHOTO;
     }
 
+    public String adminpassview()
+    {
+        employeeManagement = new EmployeeManagement();
+        try
+        {
+            ValueStack stack = ActionContext.getContext().getValueStack();
+            Map<String, Object> context = new HashMap<String, Object>();
+            Employee employee = employeeManagement.getEmployeeByPrimarykey( (int) sessionMap.get( "primarykey" ) );
+            if ( employee != null )
+            {
+                context.put( "id", employee.getEmployeeId() );
+                stack.push( context );
+            }
+        }
+        catch ( Exception e )
+        {
+            log.error( e.getMessage() );
+        }
+        return ADMINPASSVIEW;
+    }
+
     public String managephoto()
     {
-        utility = new ScoringUtility();
-        String b;
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        List<Employee> employees = null;
         try
         {
             h1 = new ArrayList<String>();
             ValueStack stack = ActionContext.getContext().getValueStack();
             Map<String, List<String>> context = new HashMap<String, List<String>>();
-            con1 = utility.openDatabaseConnection();
-            String str = "SELECT e_id FROM  employee where e_type!='Admin' order by primarykey";
-            java.sql.Statement stmt = con1.createStatement();
-            ResultSet rs = stmt.executeQuery( str );
-            if ( rs.isBeforeFirst() == false )
-                h1.add( "There is no application request pending" );
-            else
-            {
-                while ( rs.next() )
-                    h1.add( rs.getString( 1 ) );
-            }
-            context.put( "h1", h1 );
-            stack.push( context );
-            con1.close();
+            Criteria criteria = session.createCriteria( Employee.class );
+                criteria.add( Restrictions.in( "type", new String[]{"Manager","Employee"})  );
+                employees = criteria.list();
+                if ( employees == null || employees.isEmpty() )
+                    h1.add( "No Employee Present" );
+                else
+                {
+                    for ( Employee employee : employees )
+                        h1.add( employee.getEmployeeId() );
+                }
+                session.getTransaction().commit();
+                context.put( "h1", h1 );
+                stack.push( context );
         }
-        catch ( Exception e )
+        catch ( HibernateException e )
         {
+            e.printStackTrace();
+            session.getTransaction().rollback();
         }
+        
         return MANAGEPHOTO;
     }
 

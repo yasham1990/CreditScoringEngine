@@ -116,7 +116,7 @@
              <result name="viewmanagerinfo">/WEB-INF/manager/ManageView.jsp</result>
        </action>
        
-       <action name="manageviewback" method="manageviewback" class="manage.ManagerView">
+      <action name="manageviewback" method="manageviewback" class="manage.Clickme">
              <result name="input">/WEB-INF/manager/ManageView.jsp</result>
              <result name="manageviewback">/WEB-INF/manager/manager.jsp</result>
        </action>
@@ -127,6 +127,26 @@
        </action>
              
          <!-- *********for admin********** -->
+         
+         <action name="adminpassview" method="adminpassview" class="admin.mainclick">
+             <result name="input">/WEB-INF/Admin/Admin.jsp</result>
+             <result name="adminpassview">/WEB-INF/Admin/adminpasschange.jsp</result>
+       </action>
+        
+       <action name="adminpassword"  class="admin.adminpassword">
+             <result name="input">/WEB-INF/Admin/adminpasschange.jsp</result>
+             <result name="success">/WEB-INF/Admin/Admin.jsp</result>
+       </action>
+        
+       <action name="adminpasswordback" method="adminpasswordback" class="admin.adminpassword">
+       <interceptor-ref name="defaultStack">
+        		<param name="validation.excludeMethods">adminpasswordback</param>
+    		</interceptor-ref>
+             <result name="input">/WEB-INF/Admin/adminpasschange.jsp</result>
+             <result name="adminpasswordback">/WEB-INF/Admin/Admin.jsp</result>
+       </action>
+         
+         
        <action name="adminapprovephoto"  method="adminapprovephoto" class="admin.mainclick">
              <result name="input">/WEB-INF/Admin/Admin.jsp</result>
              <result name="adminapprovephoto">/WEB-INF/Admin/apprequest.jsp</result>
@@ -148,6 +168,11 @@
        <action name="accept"   class="admin.accept">
              <result name="input">/WEB-INF/Admin/adminappaccept.jsp</result>
              <result name="accept">/WEB-INF/Admin/Admin.jsp</result>
+       </action>
+       
+       <action name="reject" method="reject"  class="admin.accept">
+             <result name="input">/WEB-INF/Admin/adminappaccept.jsp</result>
+             <result name="reject">/WEB-INF/Admin/Admin.jsp</result>
        </action>
          
        <action name="bankinfo"  class="admin.bankinfo">

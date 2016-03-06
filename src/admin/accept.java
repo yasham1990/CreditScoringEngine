@@ -4,18 +4,20 @@
  */
 package admin;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.interceptor.SessionAware;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import Utility.ScoringUtility;
+import Utility.HibernateUtil;
+import hibernatemapping.Applicationid;
+import hibernatemapping.Bankinfo;
 
 /**
  * @author yasham
@@ -27,10 +29,6 @@ public class accept
     private SessionMap<String, Object> sessionMap;
 
     static Logger log = Logger.getLogger( toacceptpage.class );
-
-    ScoringUtility utility = null;
-
-    Connection con1 = null;
 
     @Override
     public void setSession( Map<String, Object> sessionMap )
@@ -49,26 +47,31 @@ public class accept
     public String execute()
         throws Exception
     {
-        utility = new ScoringUtility();
         Integer bankup = 0 ;
         try
         {
-            con1 = utility.openDatabaseConnection();
-            String str2 = "UPDATE applicationid set status='approved', level='admin' where app_no=?";
-            PreparedStatement ps = con1.prepareStatement( str2 );
-            ps.setString( 1, (String)sessionMap.get( "app_no" ) );
-            ps.executeUpdate();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria( Applicationid.class );
+            criteria.add( Restrictions.eq( "app_no", (String) sessionMap.get( "app_no" ) ) );
+            Applicationid applicationid = (Applicationid) criteria.uniqueResult();
+            if ( applicationid != null )
+            {
+                applicationid.setStatus( "approved" );
+                applicationid.setLevel( "admin" );
+            }
+            session.merge( applicationid );
+            session.saveOrUpdate( applicationid );
+            session.getTransaction().commit();
             
-            String str3 = "Select * from bankinfo";
-            java.sql.Statement stmt = con1.createStatement();
-            ResultSet rs = stmt.executeQuery( str3 );
-            if ( rs != null && rs.next() )
-                bankup = Integer.parseInt( rs.getString( 2 ) )+1;
-            
-            String str4 = "Update bankinfo set totalcards=?";
-            ps = con1.prepareStatement( str4 );
-            ps.setString( 1, bankup.toString() );
-            con1.close();
+            session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            criteria = session.createCriteria( Bankinfo.class );
+            Bankinfo bankinfo = (Bankinfo) criteria.uniqueResult();
+            if ( bankinfo != null )
+            {
+                bankinfo.setTotalcards( (Integer.parseInt(bankinfo.getTotalcards())+1)+"" );
+            }
         }
         catch ( Exception e )
         {
@@ -82,11 +85,19 @@ public class accept
     {
         try
         {
-            con1 = utility.openDatabaseConnection();
-            String str2 = "UPDATE applicationid set status='rejected' and level='admin' where app_no=?";
-            PreparedStatement ps = con1.prepareStatement( str2 );
-            ps.setString( 1, (String)sessionMap.get( "app_no" ) );
-            ps.executeUpdate();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria( Applicationid.class );
+            criteria.add( Restrictions.eq( "app_no", (String) sessionMap.get( "app_no" ) ) );
+            Applicationid applicationid = (Applicationid) criteria.uniqueResult();
+            if ( applicationid != null )
+            {
+                applicationid.setStatus( "rejected" );
+                applicationid.setLevel( "admin" );
+            }
+            session.merge( applicationid );
+            session.saveOrUpdate( applicationid );
+            session.getTransaction().commit();
         }
         catch ( Exception e )
         {

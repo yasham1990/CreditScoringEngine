@@ -4,19 +4,18 @@
  */
 package client;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.interceptor.SessionAware;
+import org.hibernate.Session;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import Utility.ScoringUtility;
+import Home.EmployeeManagement;
+import Utility.HibernateUtil;
+import hibernatemapping.Client;
 
 /**
  * @author yasham
@@ -26,15 +25,11 @@ public class clientpass
     implements SessionAware
 {
 
-    ScoringUtility utility = null;
-
-    Connection con1 = null;
+    EmployeeManagement employeeManagement = null;
 
     static Logger log = Logger.getLogger( clientpass.class );
 
     final static private String CLIENTPASSCHANGEBACK = "back";
-
-    final static private String CLIENTPASSCHANGEBACKCHANGE = "change";
 
     private SessionMap<String, Object> sessionMap;
 
@@ -101,23 +96,17 @@ public class clientpass
     public String execute()
         throws Exception
     {
-        utility = new ScoringUtility();
         try
         {
-            con1 = utility.openDatabaseConnection();
-            String str = "SELECT c_pass FROM  clients where primarykey='" + sessionMap.get( "primarykey" ) + "'";
-            Statement stmt = con1.createStatement();
-            ResultSet rs = stmt.executeQuery( str );
-
-            if ( rs != null && rs.next() && oldpassword.equals( rs.getString( 1 ) ) )
-            {
-                String str1 = "update clients set c_pass=? where primarkey=? ";
-                PreparedStatement ps = con1.prepareStatement( str1 );
-                ps.setString( 1, password );
-                ps.setString( 2, (String) sessionMap.get( "primarykey" ) );
-                ps.executeUpdate();
-            }
-            con1.close();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Client client = null;
+            session.beginTransaction();
+            client = (Client) session.get( Client.class,(int) sessionMap.get( "primarykey" ) );
+            if ( client != null && oldpassword.equals( client.getClientPass() ))
+                client.setClientPass( password );
+            session.merge( client );
+            session.saveOrUpdate( client );
+            session.getTransaction().commit();
         }
         catch ( Exception e )
         {
@@ -140,22 +129,10 @@ public class clientpass
         }
         else if ( oldpassword.length() != 0 )
         {
-            try
-            {
-                String str = "SELECT c_pass FROM  clients where primarykey='" + sessionMap.get( "primarykey" ) + "'";
-                java.sql.Statement stmt = con1.createStatement();
-                ResultSet rs = stmt.executeQuery( str );
-                if ( rs != null && rs.next() && !oldpassword.equals( rs.getString( 1 ) ) )
-                {
-                    addFieldError( "oldpassword", "Old Password did not match" );
-                }
-                con1.close();
-            }
-            catch ( Exception e )
-            {
-                log.error( e.getMessage() );
-            }
-
+            employeeManagement = new EmployeeManagement();
+            Client client = employeeManagement.getClientByPrimarykey( (int) sessionMap.get( "primarykey" ) );
+            if ( client != null && !oldpassword.equals( client.getClientPass() ) )
+                addFieldError( "oldpassword", "Old Password did not match" );
         }
         if ( "".equals( getPassword() ) )
         {

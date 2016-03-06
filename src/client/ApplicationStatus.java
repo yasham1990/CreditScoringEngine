@@ -1,9 +1,6 @@
 
 package client;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,18 +12,15 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.util.ValueStack;
 
-import Utility.ScoringUtility;
+import Home.EmployeeManagement;
+import hibernatemapping.Client;
 
 public class ApplicationStatus
     extends ActionSupport implements SessionAware
 {
     
-    ScoringUtility utility = null;
-
-    Connection con1 = null;
+    EmployeeManagement employeeManagement = null;
     
-    private RegisterBean registerBean;
-
     private SessionMap<String, Object> sessionMap;
     
     static Logger log=Logger.getLogger( ApplicationStatus.class );
@@ -44,25 +38,21 @@ public class ApplicationStatus
     public String execute()
         throws Exception
     {
-        utility = new ScoringUtility();
+        employeeManagement=new EmployeeManagement();
         try
         {
             ValueStack stack = ActionContext.getContext().getValueStack();
             Map<String, Object> context = new HashMap<String, Object>();
-            con1 = utility.openDatabaseConnection();
-            String str = "select c_firstname,c_lastname,c_phone,c_email from clients where primarykey='"
-                + sessionMap.get( "primarykey" )+"'";
-            Statement stmt = con1.createStatement();
-            ResultSet rs = stmt.executeQuery( str );
-            if ( rs != null && rs.next() )
+            employeeManagement = new EmployeeManagement();
+            Client client = employeeManagement.getClientByPrimarykey( (int) sessionMap.get( "primarykey" ) );
+            if ( client != null )
             {
-                context.put("fname" , rs.getString( 1 ) );
-                context.put("lname" , rs.getString( 2 ) );
-                context.put("mobile" , rs.getString( 3 ) );
-                context.put("email" , rs.getString( 4 ) );
+                context.put( "fname", client.getFirstname() );
+                context.put( "lname", client.getLastname() );
+                context.put( "mobile", client.getPhone() );
+                context.put( "email",  client.getEmail()  );
                 stack.push(context);
             }
-            con1.close();
         }
         catch ( Exception e )
         {

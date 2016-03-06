@@ -4,8 +4,6 @@
  */
 package manage;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +15,9 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.util.ValueStack;
 
-import Utility.ScoringUtility;
+import Home.EmployeeManagement;
+import hibernatemapping.Applicationid;
+import hibernatemapping.ExternalVerification;
 
 /**
  * @author yasham
@@ -31,9 +31,7 @@ public class ExternalInfo
 
     private SessionMap<String, Object> sessionMap;
 
-    ScoringUtility utility = null;
-
-    Connection con1 = null;
+    EmployeeManagement employeeManagement = null;
 
     @Override
     public void setSession( Map<String, Object> sessionMap )
@@ -52,42 +50,40 @@ public class ExternalInfo
     {
         try
         {
-            utility = new ScoringUtility();
-            con1 = utility.openDatabaseConnection();
+            employeeManagement = new EmployeeManagement();
+
             ValueStack stack = ActionContext.getContext().getValueStack();
             Map<String, String> context = new HashMap<String, String>();
-            String str =
-                "select * from extverify1 where applicationid_primarykey='" + sessionMap.get( "primarykey_app" ) + "'";
-            java.sql.Statement stmt = con1.createStatement();
-            ResultSet rs = stmt.executeQuery( str );
-            if ( rs != null && rs.next() )
+            Applicationid applicationid=employeeManagement.getApplicationidByPrimarykey( (int) sessionMap.get( "primarykey_app" ) );
+            ExternalVerification externalVerification =
+                employeeManagement.getExternalVerificationAppId( applicationid );
+            if ( externalVerification != null )
             {
-                context.put( "fname",rs.getString( 2 ));
-                context.put( "lname",rs.getString( 3 ));
-                context.put( "address",rs.getString( 4 ));
-                context.put( "email",rs.getString( 5 ));
-                context.put( "mobile",rs.getString( 6 ));
-                context.put( "member",rs.getString( 7 ));
-                context.put( "area",rs.getString( 8 ));
-                context.put( "hloan",rs.getString( 9 ));
-                context.put( "hpaid",rs.getString( 10 ));
-                context.put( "billpay",rs.getString( 11 ));
-                context.put( "cars",rs.getString( 12 ));
-                context.put( "cloan",rs.getString( 13 ));
-                context.put( "cpaid",rs.getString( 14 ));
-                context.put( "income",rs.getString( 15 ));
-                context.put( "nfd",rs.getString( 16 ));
-                context.put( "fdamount",rs.getString( 17 ));
-                context.put( "agland",rs.getString( 18 ));
-                context.put( "lic",rs.getString( 19 ));
-                context.put( "bankdefault",rs.getString( 20 ));
-                context.put( "tax",rs.getString( 21 ));
-                context.put( "crime",rs.getString( 22 ));
-                context.put( "otherinc",rs.getString( 23 ));
-                context.put( "otherbankcard",rs.getString( 24 ));
+                context.put( "fname", externalVerification.getEx_fname() );
+                context.put( "lname", externalVerification.getEx_lname() );
+                context.put( "address", externalVerification.getEx_address() );
+                context.put( "email", externalVerification.getEx_email() );
+                context.put( "mobile", externalVerification.getEx_mobile() );
+                context.put( "member", externalVerification.getEx_member() );
+                context.put( "area", externalVerification.getEx_area() );
+                context.put( "hloan", externalVerification.getEx_hloan() );
+                context.put( "hpaid", externalVerification.getEx_hpaid() );
+                context.put( "billpay", externalVerification.getEx_billpay() );
+                context.put( "cars", externalVerification.getEx_cars() );
+                context.put( "cloan", externalVerification.getEx_cloan() );
+                context.put( "cpaid", externalVerification.getEx_cpaid() );
+                context.put( "income", externalVerification.getEx_income() );
+                context.put( "nfd", externalVerification.getEx_nfd() );
+                context.put( "fdamount", externalVerification.getEx_famount() );
+                context.put( "agland", externalVerification.getEx_agland() );
+                context.put( "lic", externalVerification.getEx_lic() );
+                context.put( "bankdefault", externalVerification.getEx_default() );
+                context.put( "tax", externalVerification.getEx_tax() );
+                context.put( "crime", externalVerification.getEx_crime() );
+                context.put( "otherinc", externalVerification.getEx_otherinc() );
+                context.put( "otherbankcard", externalVerification.getEx_otherbank() );
             }
             stack.push( context );
-            con1.close();
         }
         catch ( Exception e )
         {

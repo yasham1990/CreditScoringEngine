@@ -44,10 +44,10 @@ function go(action)
 
                 </div>
                 <div class="panel-body">
+      <form id="form1" method="post" action="applicationStatusBack" role="form" class="form-horizontal">
 			<%boolean alreadyFiled=request.getAttribute( "filed" )!=null && !"".equals( request.getAttribute( "filed" ) )?true:false;
                         if(alreadyFiled){
                         %>
-      <form id="form1" method="post" action="applicationStatusBack" role="form" class="form-horizontal">
       <div class="form-group">
             <label for="id" class="col-sm-4 control-label">Status</label>
             <s:property value="status"/>

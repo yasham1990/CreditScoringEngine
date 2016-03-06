@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/CreditScoring/font-awesome/css/font-awesome.min.css" type="text/css">
 
     <!-- Plugin CSS -->
-    <link rel="stylesheet" href="/CreditScoring/homecss/animate.min.css" type="text/css">
+    <link rel="stylesheet" href="/AdvanceCreditScoring/homecss/animate.min.css" type="text/css">
 <link rel="stylesheet" href="/CreditScoring/homecss/creative.css" type="text/css">
 <script type="text/javascript" src="/CreditScoring/jquery.js"></script>
 

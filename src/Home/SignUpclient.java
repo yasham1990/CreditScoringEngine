@@ -1,28 +1,21 @@
-    package Home;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+package Home;
 
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import Utility.ScoringUtility;
+import hibernatemapping.Client;
 
 public class SignUpclient
     extends ActionSupport
 
 {
 
-    ScoringUtility utility = null;
-
-    Connection con1 = null;
-
     static Logger log = Logger.getLogger( SignUpclient.class );
 
     final static private String SIGNUPCLIENTBACK = "signupclientback";
+
+    EmployeeManagement employeeManagement = new EmployeeManagement();
 
     private SignUpBean signUpBean;
 
@@ -39,19 +32,15 @@ public class SignUpclient
     public String execute()
         throws Exception
     {
-        utility = new ScoringUtility();
         try
         {
-            con1 = utility.openDatabaseConnection();
-            String str = "insert into clients( c_firstname,c_lastname,c_phone,c_email,c_pass) VALUES(?,?,?,?,?) ";
-            PreparedStatement ps = con1.prepareStatement( str );
-            ps.setString( 1, signUpBean.getFname() );
-            ps.setString( 2, signUpBean.getLname() );
-            ps.setString( 3, signUpBean.getMobile() );
-            ps.setString( 4, signUpBean.getEmail() );
-            ps.setString( 5, signUpBean.getPass() );
-            ps.executeUpdate();
-            con1.close();
+            Client client = new Client();
+            client.setEmail( signUpBean.getEmail() );
+            client.setFirstname( signUpBean.getFname() );
+            client.setLastname( signUpBean.getLname() );
+            client.setPhone( signUpBean.getMobile() );
+            client.setClientPass( signUpBean.getPass() );
+            employeeManagement.create( client );
         }
         catch ( Exception e )
         {
@@ -82,25 +71,11 @@ public class SignUpclient
         {
             addFieldError( "signUpBean.confirmpassword", "Password did not match" );
         }
-        checkData( "clients" );
-    }
-
-    private void checkData( String tableName )
-    {
-        utility = new ScoringUtility();
-        try
+        else
         {
-            con1 = utility.openDatabaseConnection();
-            String str = "SELECT c_email FROM " + tableName + " where c_email='" + signUpBean.getEmail() + "'";
-            Statement stmt = con1.createStatement();
-            ResultSet rs = stmt.executeQuery( str );
-            if ( rs != null && rs.next() )
+            Client client = employeeManagement.getClient( signUpBean.getEmail() );
+            if ( client != null )
                 addFieldError( "signUpBean.email", "User already exits." );
-            con1.close();
-        }
-        catch ( Exception e )
-        {
-            log.error( e.getMessage() );
         }
 
     }

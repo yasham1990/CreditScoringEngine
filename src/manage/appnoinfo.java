@@ -1,8 +1,5 @@
 package manage;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -11,10 +8,11 @@ import org.apache.struts2.interceptor.SessionAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import Utility.ScoringUtility;
+import Home.EmployeeManagement;
+import hibernatemapping.Applicationid;
 
 /**
- * @author RANA
+ * @author Yasham
  */
 
 public class appnoinfo
@@ -25,9 +23,7 @@ public class appnoinfo
 
     static Logger log = Logger.getLogger( appnoinfo.class );
 
-    ScoringUtility utility = null;
-
-    Connection con1 = null;
+    EmployeeManagement employeeManagement = null;
 
     @Override
     public void setSession( Map<String, Object> sessionMap )
@@ -57,17 +53,14 @@ public class appnoinfo
     public String execute()
         throws Exception
     {
+        Applicationid applicationid = null;
         try
         {
-            utility = new ScoringUtility();
-            con1 = utility.openDatabaseConnection();
-            String str = "SELECT primarykey FROM applicationid where app_no='" + getId() + "'";
-            Statement stmt = con1.createStatement();
-            ResultSet rs = stmt.executeQuery( str );
-            if ( rs != null && rs.next() )
-                sessionMap.put( "primarykey_app", rs.getString( 1 ) );
+            employeeManagement = new EmployeeManagement();
+            applicationid = employeeManagement.getApplicationidByAppno( getId() );
+            if ( applicationid != null )
+                sessionMap.put( "primarykey_app", applicationid.getPrimarykey() );
             sessionMap.put( "app_no", getId() );
-            con1.close();
         }
         catch ( Exception e )
         {
@@ -87,24 +80,9 @@ public class appnoinfo
             addFieldError( "id", "Application Id is required" );
         if ( id.length() != 0 )
         {
-            int flag = 1;
-            try
-            {
-                utility = new ScoringUtility();
-                con1 = utility.openDatabaseConnection();
-                String str = "SELECT app_no FROM applicationid where app_no='" + getId() + "'";
-                Statement stmt = con1.createStatement();
-                ResultSet rs = stmt.executeQuery( str );
-
-                if ( rs != null && rs.next() )
-                    flag = 0;
-                con1.close();
-            }
-            catch ( Exception e )
-            {
-                log.error( e.getMessage() );
-            }
-            if ( flag == 1 )
+            employeeManagement = new EmployeeManagement();
+            Applicationid applicationid = employeeManagement.getApplicationidByAppno( getId() );
+            if ( applicationid == null )
                 addFieldError( "id", "Invalid application id" );
         }
     }

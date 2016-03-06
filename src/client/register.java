@@ -1,8 +1,7 @@
 
 package client;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -11,15 +10,15 @@ import org.apache.struts2.interceptor.SessionAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import Utility.ScoringUtility;
+import Home.EmployeeManagement;
+import hibernatemapping.Applicationid;
 
 public class register
     extends ActionSupport
     implements SessionAware
 {
-    ScoringUtility utility = null;
-
-    Connection con1 = null;
+    
+    EmployeeManagement employeeManagement = null;
     
     static Logger log=Logger.getLogger( register.class );
 
@@ -43,21 +42,18 @@ public class register
     @Override
     public String execute() throws Exception
     {
-        utility = new ScoringUtility();
+        employeeManagement = new EmployeeManagement();
         try
         {
             Integer i = 1001, j = 0;
             String a;
-            con1 = utility.openDatabaseConnection();
-            String str = "select app_no from applicationid ";
-            java.sql.Statement stmt = con1.createStatement();
-            ResultSet rs = stmt.executeQuery( str );
+            List<Applicationid> applicationids=employeeManagement.getApplicationidList("","");
             String appno = "A1001";
-            if(rs!=null)
+            if(applicationids!=null)
             {
-                while ( rs.next() )
+                for ( Applicationid applicationid:applicationids )
                 {
-                    a = rs.getString( 1 );
+                    a = applicationid.getApp_no();
                     appno = a.substring( 1 );
                     j = Integer.parseInt( appno );
                     if ( i < j )
@@ -68,7 +64,6 @@ public class register
                 i++;
                 appno = "A" + i.toString();
             }
-            con1.close();
 
             //sessionMap.put( "card", registerBean.getCardtype() );
             sessionMap.put( "salu", registerBean.getSalu() );

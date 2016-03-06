@@ -4,19 +4,19 @@
  */
 package emp;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.interceptor.SessionAware;
+import org.hibernate.Session;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import Utility.ScoringUtility;
+import Home.EmployeeManagement;
+import Utility.HibernateUtil;
+import hibernatemapping.Client;
+import hibernatemapping.Employee;
 
 /**
  * @author yasham
@@ -26,9 +26,7 @@ public class emppassword
     implements SessionAware
 {
 
-    ScoringUtility utility = null;
-
-    Connection con1 = null;
+    EmployeeManagement employeeManagement = null;
 
     static Logger log = Logger.getLogger( emppassword.class );
 
@@ -99,23 +97,18 @@ public class emppassword
     public String execute()
         throws Exception
     {
-        utility = new ScoringUtility();
         try
         {
-            con1 = utility.openDatabaseConnection();
-            String str = "SELECT e_pass FROM  employee where primarykey='" + sessionMap.get( "primarykey" ) + "'";
-            Statement stmt = con1.createStatement();
-            ResultSet rs = stmt.executeQuery( str );
 
-            if ( rs != null && rs.next() && oldpassword.equals( rs.getString( 1 ) ) )
-            {
-                String str1 = "update employee set e_pass=? where primarykey=? ";
-                PreparedStatement ps = con1.prepareStatement( str1 );
-                ps.setString( 1, password );
-                ps.setString( 2, (String) sessionMap.get( "primarykey" ) );
-                ps.executeUpdate();
-            }
-            con1.close();
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Employee employee = null;
+            session.beginTransaction();
+            employee = (Employee) session.get( Employee.class, (int) sessionMap.get( "primarykey" ) );
+            if ( employee != null && oldpassword.equals( employee.getEmployeePass() ) )
+                employee.setEmployeePass( password );
+            session.merge( employee );
+            session.saveOrUpdate( employee );
+            session.getTransaction().commit();
         }
         catch ( Exception e )
         {
@@ -132,7 +125,6 @@ public class emppassword
 
     public void validate()
     {
-        utility = new ScoringUtility();
         try
         {
             setId( getId() );
@@ -142,15 +134,10 @@ public class emppassword
             }
             else if ( oldpassword.length() != 0 )
             {
-                con1 = utility.openDatabaseConnection();
-                String str = "SELECT e_pass FROM employee where primarykey='" + sessionMap.get( "primarykey" ) + "'";
-                java.sql.Statement stmt = con1.createStatement();
-                ResultSet rs = stmt.executeQuery( str );
-                if ( rs != null && rs.next() && !oldpassword.equals( rs.getString( 1 ) ) )
-                {
+                employeeManagement = new EmployeeManagement();
+                Employee employee = employeeManagement.getEmployeeByPrimarykey( (int) sessionMap.get( "primarykey" ) );
+                if ( employee != null && !oldpassword.equals( employee.getEmployeePass() ) )
                     addFieldError( "oldpassword", "Old Password did not match" );
-                }
-                con1.close();
             }
             if ( "".equals( getPassword() ) )
                 addFieldError( "password", "Password is required" );

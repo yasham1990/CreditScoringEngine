@@ -1,0 +1,30 @@
+CREATE TABLE ADMIN (primarykey INT NOT NULL PRIMARY KEY AUTO_INCREMENT, A_id VARCHAR(100),A_PASS VARCHAR(100));
+CREATE TABLE adminappreq (primarykey INT NOT NULL PRIMARY KEY AUTO_INCREMENT, app_no VARCHAR(100),name VARCHAR(100), card_type VARCHAR(100), gen_score VARCHAR(100));
+CREATE TABLE bankinfo (primarykey INT NOT NULL PRIMARY KEY AUTO_INCREMENT, liquid VARCHAR(100),totalcards VARCHAR(100), silver VARCHAR(100), gold VARCHAR(100), platinum VARCHAR(100),employee VARCHAR(100), manager VARCHAR(100), maintcost VARCHAR(100), dos date);
+CREATE TABLE bankinfo (primarykey INT NOT NULL PRIMARY KEY AUTO_INCREMENT, liquid VARCHAR(100),totalcards VARCHAR(100), silver VARCHAR(100), gold VARCHAR(100), platinum VARCHAR(100),employee VARCHAR(100), manager VARCHAR(100), maintcost VARCHAR(100), dos date);
+
+
+CREATE TABLE cdetails (primarykey INT NOT NULL PRIMARY KEY AUTO_INCREMENT, app VARCHAR(100),door_no VARCHAR(100), street VARCHAR(100), landmark VARCHAR(100), nationality VARCHAR(100),city VARCHAR(100), state VARCHAR(100), zip VARCHAR(100), resi_no VARCHAR(100));
+
+CREATE TABLE clients (primarykey INT NOT NULL PRIMARY KEY AUTO_INCREMENT, app_no VARCHAR(100),c_id VARCHAR(100),c_pass VARCHAR(100), c_name VARCHAR(100), c_phone VARCHAR(100), c_email VARCHAR(100),c_dob Date, c_dor Date, c_gender VARCHAR(100), c_address VARCHAR(100), card_type VARCHAR(100), card_no VARCHAR(100), card_limit VARCHAR(100), cvv_no VARCHAR(100), reward VARCHAR(100), totalamount VARCHAR(100));
+
+CREATE TABLE edetails (primarykey INT NOT NULL PRIMARY KEY AUTO_INCREMENT, app_no VARCHAR(100),profession VARCHAR(100), e_name VARCHAR(100), e_id VARCHAR(100),doj Date,e_address VARCHAR(100), fax VARCHAR(100), office_no VARCHAR(100), email VARCHAR(100));
+
+CREATE TABLE employee (primarykey INT NOT NULL PRIMARY KEY AUTO_INCREMENT, e_id VARCHAR(100),e_pass VARCHAR(100), e_name VARCHAR(100), e_phone VARCHAR(100), e_salary VARCHAR(100),e_address VARCHAR(100), e_dob Date, e_email VARCHAR(100), e_gen VARCHAR(100), e_doj Date);
+
+
+CREATE TABLE extverify1 (primarykey INT NOT NULL PRIMARY KEY AUTO_INCREMENT, app_no VARCHAR(100),ex_fname VARCHAR(100), ex_lname VARCHAR(100), ex_address VARCHAR(100), ex_email VARCHAR(100),ex_mobile VARCHAR(100), ex_member VARCHAR(100), ex_area VARCHAR(100), ex_hloan VARCHAR(100), ex_hpaid VARCHAR(100),  ex_billpay VARCHAR(100), ex_cars VARCHAR(100), ex_cloan VARCHAR(100), ex_cpaid VARCHAR(100),  ex_income VARCHAR(100), ex_nfd VARCHAR(100), ex_fdamount VARCHAR(100), ex_agland VARCHAR(100),  ex_lic VARCHAR(100), ex_default VARCHAR(100), ex_tax VARCHAR(100), ex_crime VARCHAR(100),  ex_otherinc VARCHAR(100), ex_otherbank VARCHAR(100));
+
+CREATE TABLE furdetails (primarykey INT NOT NULL PRIMARY KEY AUTO_INCREMENT, app_no VARCHAR(100),name_appear VARCHAR(100), salary_acc VARCHAR(100), bank_name VARCHAR(100), acc_no VARCHAR(100),acc_name VARCHAR(100),bank VARCHAR(100), card_holder VARCHAR(100), card_limit VARCHAR(100), reg_date Date, other_card VARCHAR(100), appstatus VARCHAR(100));
+
+CREATE TABLE manager (primarykey INT NOT NULL PRIMARY KEY AUTO_INCREMENT, m_id VARCHAR(100),m_pass VARCHAR(100), m_name VARCHAR(100), m_phone VARCHAR(100), m_salary VARCHAR(100),m_address VARCHAR(100), m_dob Date, m_email VARCHAR(100), m_gen VARCHAR(100), m_doj Date);
+
+CREATE TABLE managerappid (primarykey INT NOT NULL PRIMARY KEY AUTO_INCREMENT, app_no VARCHAR(100),c_type VARCHAR(100), c_name VARCHAR(100) );
+
+CREATE TABLE register1 (primarykey INT NOT NULL PRIMARY KEY AUTO_INCREMENT, app_no VARCHAR(100),salutation VARCHAR(100), fname VARCHAR(100), lname VARCHAR(100), birth DATE,m_status VARCHAR(100), sex VARCHAR(100), pan VARCHAR(100), mobile VARCHAR(100), email VARCHAR(100), annual VARCHAR(100),monthly VARCHAR(100),card_type VARCHAR(100));
+
+CREATE TABLE reguser (primarykey INT NOT NULL PRIMARY KEY AUTO_INCREMENT, app_no VARCHAR(100),c_type VARCHAR(100), c_name VARCHAR(100) );
+
+CREATE TABLE rewards (primarykey INT NOT NULL PRIMARY KEY AUTO_INCREMENT, code VARCHAR(100),point VARCHAR(100));
+
+CREATE TABLE transuser (primarykey INT NOT NULL PRIMARY KEY AUTO_INCREMENT, c_id VARCHAR(100),c_type VARCHAR(100), c_amount VARCHAR(100), time timestamp );
